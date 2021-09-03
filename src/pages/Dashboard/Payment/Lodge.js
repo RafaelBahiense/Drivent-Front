@@ -21,7 +21,7 @@ export default function Lodge({ lodge, setLodge, prices }) {
           lodge={!lodge}
         >
           <p className="name">Com Hotel</p>
-          <p className="price">+ R$ {prices?.hotel || "-"}</p>{" "}
+          <p className="price">+ R$ {prices?.hotel || "-"}</p>
         </Button>
       </Container>
     </>
