@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
-export default function HasNoHotel() {
+export default function MissingStepsMessage() {
   return (
-    <ContainerNoHotelSelection>
+    <ContainerMissingStepsMessage>
       Sua modalidade de ingresso não inclui hospedagem <br /> Prossiga para a
       escolha de atividades
-    </ContainerNoHotelSelection>
+    </ContainerMissingStepsMessage>
   );
 }
 
-const ContainerNoHotelSelection = styled.div`
+const ContainerMissingStepsMessage = styled.div`
   width: 100%;
   height: calc(100% - 61px);
 
@@ -25,4 +25,4 @@ const ContainerNoHotelSelection = styled.div`
   font-family: 'Roboto', sans-serif;
 `;
 
-export { ContainerNoHotelSelection };
+export { ContainerMissingStepsMessage };

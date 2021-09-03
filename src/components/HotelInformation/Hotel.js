@@ -7,7 +7,7 @@ export default function Hotel({ selected, setSelected, hotel }) {
       <HotelImage src={hotel.image} alt="an hotel" />
       <HotelName> {hotel.name}</HotelName>
       <DescriptionTitle>Tipos de acomodação:</DescriptionTitle>
-      <DescriptionInfo>Single, Double e Triple</DescriptionInfo>
+      <DescriptionInfo>{hotel.roomsTypes}</DescriptionInfo>
       <DescriptionTitle>Vagas disponíveis:</DescriptionTitle>
       <DescriptionInfo>{hotel.availableBeds}</DescriptionInfo>
     </HotelBox>

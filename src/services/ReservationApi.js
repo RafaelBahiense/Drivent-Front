@@ -1,9 +1,9 @@
 import api from "./api";
 import AuthenticatedApi from "./AuthenticatedApi";
 
-export default class HotelApi extends AuthenticatedApi {
-  getHotelInfo() {
-    return api.get("/hotels/", {
+export default class ReservationApi extends AuthenticatedApi {
+  getReservationInfo() {
+    return api.get("/reservation/", {
       headers: {
         ...this.getAuthorizationHeader()
       }

@@ -12,10 +12,8 @@ export default function HotelSelection() {
   useEffect(() => {
     const promisse = api.hotels.getHotelInfo();
     promisse.then((data) => {
+      console.log(data.data);
       setHotelData(data.data);
-    });
-    promisse.catch(() => {
-      console.log("Erro");
     });
   }, []);
   return (
