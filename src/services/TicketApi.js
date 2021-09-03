@@ -17,4 +17,12 @@ export default class TicketApi extends AuthenticatedApi {
       },
     });
   }
+
+  getTicketPricess() {
+    return api.get("/tickets/prices", {
+      headers: {
+        ...this.getAuthorizationHeader(),
+      },
+    });
+  }
 }
