@@ -27,11 +27,11 @@ export default function HotelInformation() {
       <StyledTypography variant="h4">
         Escolha de Hotel e Quarto
       </StyledTypography>
-      {!userStatus?.payment?.id ? (
+      {!userStatus[0]?.payment?.id ? (
         <HasNoPayment />
-      ) : !userStatus?.ticket?.isPresencial ? (
+      ) : !userStatus[0]?.ticket?.isPresencial ? (
         <MissingStepsMessage />
-      ) : userStatus?.ticket?.hasHotel ? (
+      ) : userStatus[0]?.ticket?.hasHotel ? (
         <SelectHotel />
       ) : (
         <MissingStepsMessage />

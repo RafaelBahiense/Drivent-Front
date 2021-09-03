@@ -1,9 +1,20 @@
 import styled from "styled-components";
 
-export default function Hotel({ selected, setSelected, hotel }) {
-  const checker = [selected, hotel.id];
+export default function Hotel({
+  selectedHotel,
+  setSelectedHotel,
+  hotel,
+  setSelectedRoom,
+}) {
+  const checker = [selectedHotel, hotel.id];
   return (
-    <HotelBox onClick={() => setSelected(hotel.id)} checker={checker}>
+    <HotelBox
+      onClick={() => {
+        setSelectedHotel(hotel.id);
+        setSelectedRoom(null);
+      }}
+      checker={checker}
+    >
       <HotelImage src={hotel.image} alt="an hotel" />
       <HotelName> {hotel.name}</HotelName>
       <DescriptionTitle>Tipos de acomodação:</DescriptionTitle>
