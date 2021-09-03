@@ -12,10 +12,7 @@ import SelectHotel from "./SelectHotel";
 dayjs.extend(CustomParseFormat);
 
 export default function HotelInformation() {
-  const [userStatus, setUserStatus] = useState({
-    payment: { id: 1 },
-    ticket: { isPresencial: true, hasHotel: true },
-  });
+  const [userStatus, setUserStatus] = useState({});
   useEffect(() => {
     const request = api.get(
       `${process.env.REACT_APP_API_BASE_URL}/reservations`

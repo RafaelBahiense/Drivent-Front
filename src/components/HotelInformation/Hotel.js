@@ -1,17 +1,15 @@
-import { useState } from "react";
 import styled from "styled-components";
-import hotel from "../../assets/images/hotel.jpg";
 
-export default function Hotel({ selected, setSelected, id }) {
-  const checker = [selected, id];
+export default function Hotel({ selected, setSelected, hotel }) {
+  const checker = [selected, hotel.id];
   return (
-    <HotelBox onClick={() => setSelected(id)} checker={checker}>
-      <HotelImage src={hotel} alt="an hotel" />
-      <HotelName> Driven Resort</HotelName>
-      <RoomType>Tipos de acomodação:</RoomType>
-      <RoomInfo>Single e Double</RoomInfo>
-      <RoomType>Vagas disponíveis:</RoomType>
-      <RoomInfo>103</RoomInfo>
+    <HotelBox onClick={() => setSelected(hotel.id)} checker={checker}>
+      <HotelImage src={hotel.image} alt="an hotel" />
+      <HotelName> {hotel.name}</HotelName>
+      <DescriptionTitle>Tipos de acomodação:</DescriptionTitle>
+      <DescriptionInfo>Single, Double e Triple</DescriptionInfo>
+      <DescriptionTitle>Vagas disponíveis:</DescriptionTitle>
+      <DescriptionInfo>{hotel.availableBeds}</DescriptionInfo>
     </HotelBox>
   );
 }
@@ -37,14 +35,14 @@ const HotelName = styled.p`
   color: #343434;
   margin-bottom: 10px;
 `;
-const RoomType = styled.p`
+const DescriptionTitle = styled.p`
   font-weight: bold;
   font-size: 12px;
   color: #3c3c3c;
   margin-bottom: 2px;
 `;
 
-const RoomInfo = styled.p`
+const DescriptionInfo = styled.p`
   font-size: 12px;
   color: #3c3c3c;
   margin-bottom: 14px;
