@@ -27,7 +27,7 @@ export default function HotelSelection() {
       toast("Seu quarto foi reservado com sucesso!");
     });
     promisse.catch(() => {
-      toast("Deu ruim filhão");
+      toast("Houve um erro ao reservar o seu quarto!");
     });
   }
   return (
@@ -47,7 +47,7 @@ export default function HotelSelection() {
             );
           })}
         </HotelWrapper>
-        {selectedHotel ? (
+        {selectedHotel && (
           <>
             <Subtitle>Ótima pedida! Agora escolha seu quarto:</Subtitle>
             <RoomWrapper>
@@ -64,16 +64,12 @@ export default function HotelSelection() {
                   );
                 })}
             </RoomWrapper>
-            {selectedRoom ? (
+            {selectedRoom && (
               <ConfirmateRoom onClick={reservateRoom}>
                 RESERVAR QUARTO
               </ConfirmateRoom>
-            ) : (
-              ""
             )}
           </>
-        ) : (
-          ""
         )}
       </HotelPage>
     </>
