@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
-export default function Lodge() {
+export default function Lodge({ lodge, setLodge }) {
   return (
     <>
       <Description>
         Ótimo! Agora escolha sua modalidade de hospedagem
       </Description>
       <Container>
-        <Button>
+        <Button onClick={() => setLodge(false)} lodge={lodge}>
           <p className="name">Sem Hotel</p>
           <p className="price">+ R$ 0</p> {/*get from database*/}
         </Button>
-        <Button>
+        <Button onClick={() => setLodge(true)} lodge={!lodge}>
           <p className="name">Com Hotel</p>
           <p className="price">+ R$ 350</p> {/*get from database*/}
         </Button>
@@ -43,6 +43,8 @@ const Button = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: ${(props) =>
+    props.lodge === undefined ? null : props.lodge ? null : "#FFEED2"};
   .name {
     color: #454545;
     font-size: 16px;
