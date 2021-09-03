@@ -10,7 +10,7 @@ export default class TicketApi extends AuthenticatedApi {
     });
   }
 
-  getPersonalInformations() {
+  getTicketInformations() {
     return api.get("/tickets", {
       headers: {
         ...this.getAuthorizationHeader(),
