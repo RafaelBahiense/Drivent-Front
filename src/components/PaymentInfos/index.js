@@ -10,10 +10,10 @@ import { toast } from "react-toastify";
 
 export default function PaymentInfos() {
   const [enrollmentData, setEnrollmentData] = useState();
-  const [hasHotel, setHasHotel] = useState(); //const [lodge, setLodge] = useState();
+  const [hasHotel, setHasHotel] = useState();
   const [isOnline, setIsOnline] = useState();
   const [prices, setPrices] = useState();
-  const { enrollment, ticketPrices } = useApi(); //const api = useApi();
+  const { enrollment, ticketPrices } = useApi();
 
   useEffect(() => {
     ticketPrices
