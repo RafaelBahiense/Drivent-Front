@@ -1,380 +1,76 @@
 import styled from "styled-components";
-import { HotelWrapper } from "../HotelInformation/HotelWrapper";
 import Hotel from "../HotelInformation/Hotel";
+
+import { useState, useEffect } from "react";
+import useApi from "../../hooks/useApi";
 import { RoomWrapper } from "./RoomInformation/RoomWrapper";
-import { useState } from "react";
 import Room from "./RoomInformation/Room";
+import { toast } from "react-toastify";
 
 export default function HotelSelection() {
-  const [selected, setSelected] = useState(null);
-  const hotels = [
-    {
-      availableBeds: 36,
-      id: 1,
-      name: "Driven Resort",
-      image: "https://i.ibb.co/bJC8Xcc/Driven-Resort.png",
-      rooms: [
-        {
-          id: 1,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 1,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 1,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 1,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 1,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
+  const [selectedHotel, setSelectedHotel] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [hotelData, setHotelData] = useState([]);
 
-        {
-          id: 1,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 2,
-          number: "102",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 3,
-          number: "103",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 4,
-          number: "104",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 5,
-          number: "201",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 6,
-          number: "202",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 7,
-          number: "203",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 8,
-          number: "204",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 9,
-          number: "301",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 10,
-          number: "302",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 11,
-          number: "303",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 12,
-          number: "304",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 13,
-          number: "401",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 14,
-          number: "402",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 15,
-          number: "403",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 16,
-          number: "404",
-          capacity: 3,
-          availableBeds: 3,
-        },
-      ],
-    },
-    {
-      availableBeds: 36,
-      id: 2,
-      name: "Driven Palace",
-      image: "https://i.ibb.co/JQ411jN/Driven-Palace.png",
-      rooms: [
-        {
-          id: 17,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 18,
-          number: "102",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 19,
-          number: "103",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 20,
-          number: "104",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 21,
-          number: "201",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 22,
-          number: "202",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 23,
-          number: "203",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 24,
-          number: "204",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 25,
-          number: "301",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 26,
-          number: "302",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 27,
-          number: "303",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 28,
-          number: "304",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 29,
-          number: "401",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 30,
-          number: "402",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 31,
-          number: "403",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 32,
-          number: "404",
-          capacity: 3,
-          availableBeds: 3,
-        },
-      ],
-    },
-    {
-      availableBeds: 36,
-      id: 3,
-      name: "Driven World",
-      image: "https://i.ibb.co/Z2dKHp9/Driven-World.png",
-      rooms: [
-        {
-          id: 33,
-          number: "101",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 34,
-          number: "102",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 35,
-          number: "103",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 36,
-          number: "104",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 37,
-          number: "201",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 38,
-          number: "202",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 39,
-          number: "203",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 40,
-          number: "204",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 41,
-          number: "301",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 42,
-          number: "302",
-          capacity: 1,
-          availableBeds: 1,
-        },
-        {
-          id: 43,
-          number: "303",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 44,
-          number: "304",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 45,
-          number: "401",
-          capacity: 2,
-          availableBeds: 2,
-        },
-        {
-          id: 46,
-          number: "402",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 47,
-          number: "403",
-          capacity: 3,
-          availableBeds: 3,
-        },
-        {
-          id: 48,
-          number: "404",
-          capacity: 3,
-          availableBeds: 3,
-        },
-      ],
-    },
-  ];
+  const api = useApi();
+
+  useEffect(() => {
+    const promisse = api.hotels.getHotelInfo();
+    promisse.then((data) => {
+      setHotelData(data.data);
+    });
+  }, []);
+
+  function reservateRoom() {
+    const promisse = api.reservation.postReservation(selectedRoom);
+    promisse.then(() => {
+      toast("Seu quarto foi reservado com sucesso!");
+    });
+    promisse.catch(() => {
+      toast("Deu ruim filhão");
+    });
+  }
   return (
     <>
       <HotelPage>
         <Subtitle>Primeiro, escolha seu hotel</Subtitle>
         <HotelWrapper>
-          {hotels.map((hotel) => {
+          {hotelData.map((hotel) => {
             return (
               <Hotel
-                selected={selected}
-                setSelected={setSelected}
-                id={hotel.id}
+                key={hotel.id}
+                setSelectedRoom={setSelectedRoom}
+                selectedHotel={selectedHotel}
+                setSelectedHotel={setSelectedHotel}
+                hotel={hotel}
               />
             );
           })}
         </HotelWrapper>
-        {selected ? (
+        {selectedHotel ? (
           <>
             <Subtitle>Ótima pedida! Agora escolha seu quarto:</Subtitle>
             <RoomWrapper>
-              {hotels[1].rooms.map((room) => {
-                return <Room room={room}/>;
-              })}
+              {hotelData
+                .filter((h) => h.id === selectedHotel)[0]
+                .rooms.map((room) => {
+                  return (
+                    <Room
+                      key={room.id}
+                      room={room}
+                      selectedRoom={selectedRoom}
+                      setSelectedRoom={setSelectedRoom}
+                    />
+                  );
+                })}
             </RoomWrapper>
+            {selectedRoom ? (
+              <ConfirmateRoom onClick={reservateRoom}>
+                RESERVAR QUARTO
+              </ConfirmateRoom>
+            ) : (
+              ""
+            )}
           </>
         ) : (
           ""
@@ -383,6 +79,18 @@ export default function HotelSelection() {
     </>
   );
 }
+
+const ConfirmateRoom = styled.button`
+  margin-top: 46px;
+  width: 182px;
+  height: 37px;
+  background: #e0e0e0;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+`;
 
 const Subtitle = styled.p`
   font-size: 20px;
@@ -393,4 +101,10 @@ const Subtitle = styled.p`
 
 const HotelPage = styled.div`
   font-family: "Roboto", sans-serif;
+`;
+
+const HotelWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 52px;
 `;

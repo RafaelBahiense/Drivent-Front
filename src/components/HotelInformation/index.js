@@ -3,23 +3,20 @@ import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import dayjs from "dayjs";
 import CustomParseFormat from "dayjs/plugin/customParseFormat";
-import api from "../../services/api";
 
-import HasNoHotel from "./HasNoHotel";
+import MissingStepsMessage from "./MissingStepsMessage";
 import HasNoPayment from "./HasNoPayment";
 import SelectHotel from "./SelectHotel";
+import useApi from "../../hooks/useApi";
 
 dayjs.extend(CustomParseFormat);
 
 export default function HotelInformation() {
-  const [userStatus, setUserStatus] = useState({
-    payment: { id: 1 },
-    ticket: { isPresencial: true, hasHotel: true },
-  });
+  const [userStatus, setUserStatus] = useState({});
+  const api = useApi();
+
   useEffect(() => {
-    const request = api.get(
-      `${process.env.REACT_APP_API_BASE_URL}/reservations`
-    );
+    const request = api.reservation.getReservationInfo();
     request.then((response) => {
       setUserStatus(response.data);
     });
@@ -30,14 +27,14 @@ export default function HotelInformation() {
       <StyledTypography variant="h4">
         Escolha de Hotel e Quarto
       </StyledTypography>
-      {!userStatus?.payment?.id ? (
+      {!userStatus[0]?.payment?.id ? (
         <HasNoPayment />
-      ) : !userStatus?.ticket?.isPresencial ? (
-        <HasNoHotel />
-      ) : userStatus?.ticket?.hasHotel ? (
+      ) : !userStatus[0]?.ticket?.isPresencial ? (
+        <MissingStepsMessage />
+      ) : userStatus[0]?.ticket?.hasHotel ? (
         <SelectHotel />
       ) : (
-        <HasNoHotel />
+        <MissingStepsMessage />
       )}
     </>
   );
