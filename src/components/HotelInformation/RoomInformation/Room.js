@@ -2,12 +2,13 @@ import styled from "styled-components";
 import { BsPerson, BsPersonFill } from "react-icons/bs";
 import { useState } from "react";
 export default function Room({ room }) {
+  const [disabler, setDisabler] = useState(false);
   return (
-    <RoomCard>
+    <RoomCard disabler={disabler} onClick={() => setDisabler(true)}>
       <RoomNumber>{room.number}</RoomNumber>
       <IconBox>
         {[...Array(room.capacity)].map(() => {
-          return <BsPerson className="icon" />;
+          return <BsPersonFill className="icon" />;
         })}
       </IconBox>
     </RoomCard>
@@ -23,6 +24,9 @@ const RoomCard = styled.div`
   justify-content: space-between;
   margin-right: 17px;
   margin-bottom: 8px;
+  background-color: white;
+  filter: ${(props) => (props.disabler ? "brightness(0.9)" : "brightness(1)")};
+  opacity: ${(props) => (props.disabler ? "55%" : "1")};
   .icon {
     font-size: 21px;
   }
