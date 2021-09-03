@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export default function Resume() {
+export default function Resume({ value }) {
   return (
     <>
       <Description>
-        Fechado! O total ficou em <span>R$ 600.</span> Agora é só confirmar:
+        Fechado! O total ficou em <span>R$ {value}.</span> Agora é só confirmar:
       </Description>
       <ReserveButton>RESERVAR INGRESSO</ReserveButton>
     </>
