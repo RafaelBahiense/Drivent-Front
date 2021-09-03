@@ -1,19 +1,27 @@
 import styled from "styled-components";
 
-export default function Lodge({ lodge, setLodge }) {
+export default function Lodge({ lodge, setLodge, prices }) {
   return (
     <>
       <Description>
         Ótimo! Agora escolha sua modalidade de hospedagem
       </Description>
       <Container>
-        <Button onClick={() => setLodge(false)} lodge={lodge}>
+        <Button
+          className={lodge === undefined ? null : lodge ? null : "selected"}
+          onClick={() => setLodge(false)}
+          lodge={lodge}
+        >
           <p className="name">Sem Hotel</p>
-          <p className="price">+ R$ 0</p> {/*get from database*/}
+          <p className="price">+ R$ 0</p>
         </Button>
-        <Button onClick={() => setLodge(true)} lodge={!lodge}>
+        <Button
+          className={lodge === undefined ? null : lodge ? "selected" : null}
+          onClick={() => setLodge(true)}
+          lodge={!lodge}
+        >
           <p className="name">Com Hotel</p>
-          <p className="price">+ R$ 350</p> {/*get from database*/}
+          <p className="price">+ R$ {prices?.hotel || "-"}</p>{" "}
         </Button>
       </Container>
     </>
@@ -30,6 +38,10 @@ const Description = styled.p`
 const Container = styled.div`
   margin-top: 17px;
   display: flex;
+  .selected {
+    border: none;
+    background-color: #ffeed2;
+  }
 `;
 
 const Button = styled.div`
@@ -43,8 +55,6 @@ const Button = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) =>
-    props.lodge === undefined ? null : props.lodge ? null : "#FFEED2"};
   .name {
     color: #454545;
     font-size: 16px;
