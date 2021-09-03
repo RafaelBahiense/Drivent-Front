@@ -1,30 +1,24 @@
 import styled from "styled-components";
-import Typography from "@material-ui/core/Typography";
 import { HotelWrapper } from "../HotelInformation/HotelWrapper";
 import Hotel from "../HotelInformation/Hotel";
+import { useState } from "react";
 
 export default function HotelSelection() {
-  let array = [1, 2, 3, 4];
+  const [selected, setSelected] = useState(null);
+  const hotels = [{ id: 1 }, { id: 2 }, { id: 3 }];
   return (
     <>
       <HotelPage>
-        <StyledTypography variant="h4">
-          Escolha de hotel e quarto
-        </StyledTypography>
         <Subtitle>Primeiro, escolha seu hotel</Subtitle>
         <HotelWrapper>
-          {array.map(() => {
-            return <Hotel />;
+          {hotels.map((hotel) => {
+            return <Hotel selected={selected} setSelected={setSelected} id={hotel.id}/>;
           })}
         </HotelWrapper>
       </HotelPage>
     </>
   );
 }
-
-const StyledTypography = styled(Typography)`
-  margin-bottom: 36px !important;
-`;
 
 const Subtitle = styled.p`
   font-size: 20px;

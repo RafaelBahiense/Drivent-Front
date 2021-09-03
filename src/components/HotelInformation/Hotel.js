@@ -1,9 +1,11 @@
+import { useState } from "react";
 import styled from "styled-components";
 import hotel from "../../assets/images/hotel.jpg";
 
-export default function Hotel() {
+export default function Hotel({ selected, setSelected, id }) {
+  const checker = [selected, id];
   return (
-    <HotelBox src="../../assets/images/hotel.jpg">
+    <HotelBox onClick={() => setSelected(id)} checker={checker}>
       <HotelImage src={hotel} alt="an hotel" />
       <HotelName> Driven Resort</HotelName>
       <RoomType>Tipos de acomodação:</RoomType>
@@ -18,7 +20,8 @@ const HotelBox = styled.div`
   width: 196px;
   height: 264px;
   border-radius: 10px;
-  background-color: #f1f1f1;
+  background-color: ${(props) =>
+    props.checker[0] === props.checker[1] ? "#FFEED2" : "#F1F1F1"};
   margin-right: 19px;
   padding-left: 14px;
 `;

@@ -1,7 +1,5 @@
-import HotelSelection from "../../../components/HotelSelection";
+import HotelInformation from "../../../components/HotelInformation";
 
 export default function Hotel() {
-  return (
-    <HotelSelection/>
-  );
+  return <HotelInformation />;
 }
