@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 
 import useApi from "../../hooks/useApi";
 import TicketType from "./TicketType";
+import Subtitle from "./Subtitle";
 
 export default function PaymentInfos() {
   const [enrollmentData, setEnrollmentData] = useState();
@@ -38,14 +39,21 @@ export default function PaymentInfos() {
       />
       {isOnline !== undefined ? (
         isOnline ? (
-          <TicketType
-            condition={hasHotel}
-            setCondition={setHasHotel}
-            subtitle={"Ótimo! Agora escolha sua modalidade de hospedagem"}
-            names={["Sem Hotel", "Com Hotel"]}
-            prices={[0, 350]}
-          />
-        ) : null
+          <>
+            <TicketType
+              condition={hasHotel}
+              setCondition={setHasHotel}
+              subtitle={"Ótimo! Agora escolha sua modalidade de hospedagem"}
+              names={["Sem Hotel", "Com Hotel"]}
+              prices={[0, 350]}
+            />
+            {hasHotel !== undefined ? (
+              <Subtitle text={"resumo do pedido"} />
+            ) : null}
+          </>
+        ) : (
+          <Subtitle text={"resumo do pedido"} />
+        )
       ) : null}
     </>
   );
