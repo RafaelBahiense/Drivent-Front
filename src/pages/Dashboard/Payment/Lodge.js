@@ -1,19 +1,27 @@
 import styled from "styled-components";
 
-export default function Lodge() {
+export default function Lodge({ lodge, setLodge, prices }) {
   return (
     <>
       <Description>
         Ótimo! Agora escolha sua modalidade de hospedagem
       </Description>
       <Container>
-        <Button>
+        <Button
+          className={lodge === undefined ? null : lodge ? null : "selected"}
+          onClick={() => setLodge(false)}
+          lodge={lodge}
+        >
           <p className="name">Sem Hotel</p>
-          <p className="price">+ R$ 0</p> {/*get from database*/}
+          <p className="price">+ R$ 0</p>
         </Button>
-        <Button>
+        <Button
+          className={lodge === undefined ? null : lodge ? "selected" : null}
+          onClick={() => setLodge(true)}
+          lodge={!lodge}
+        >
           <p className="name">Com Hotel</p>
-          <p className="price">+ R$ 350</p> {/*get from database*/}
+          <p className="price">+ R$ {prices?.hotel || "-"}</p>
         </Button>
       </Container>
     </>
@@ -30,6 +38,10 @@ const Description = styled.p`
 const Container = styled.div`
   margin-top: 17px;
   display: flex;
+  .selected {
+    border: none;
+    background-color: #ffeed2;
+  }
 `;
 
 const Button = styled.div`
