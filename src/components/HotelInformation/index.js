@@ -7,6 +7,7 @@ import CustomParseFormat from "dayjs/plugin/customParseFormat";
 import MissingStepsMessage from "./MissingStepsMessage";
 import HasNoPayment from "./HasNoPayment";
 import SelectHotel from "./SelectHotel";
+import ResumeHotel from "./ResumeHotel";
 import useApi from "../../hooks/useApi";
 
 dayjs.extend(CustomParseFormat);
@@ -25,9 +26,11 @@ export default function HotelInformation() {
   return (
     <>
       <StyledTypography variant="h4">
-        Escolha de Hotel e Quarto
+        Escolha de hotel e quarto
       </StyledTypography>
-      {!userStatus[0]?.payment?.id ? (
+      {userStatus[0]?.room?.id ? (
+        <ResumeHotel />
+      ) : !userStatus[0]?.payment?.id ? (
         <HasNoPayment />
       ) : !userStatus[0]?.ticket?.isPresencial ? (
         <MissingStepsMessage />
