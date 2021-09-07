@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import useApi from "../../../hooks/useApi";
 
 import { ContainerMissingStepsMessage } from "../../../components/HotelInformation/MissingStepsMessage";
+import SelectEventDay from "../../../components/Activities";
 
 export default function Activities() {
   const [userStatus, setUserStatus] = useState([{}]);
@@ -31,7 +32,7 @@ export default function Activities() {
           acesso a todas as atividades.
         </ContainerMissingStepsMessage>
       ) : (
-        <SelectActivity />
+        <SelectEventDay />
       )}
     </>
   );
@@ -41,4 +42,3 @@ const StyledTypography = styled(Typography)`
   margin-bottom: 20px !important;
 `;
 
-const SelectActivity = styled.div``;
