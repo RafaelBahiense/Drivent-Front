@@ -6,7 +6,7 @@ import {
   HotelWrapper,
 } from "./HotelPageStyle";
 
-import { Redirect, useRouteMatch, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 import useApi from "../../hooks/useApi";
@@ -35,7 +35,7 @@ export default function HotelSelection() {
       history.push("/dashboard/activities");
     });
     promisse.catch(() => {
-      toast("Deu ruim filhão");
+      toast("Houve um erro ao reservar o seu quarto!");
     });
   }
   return (
@@ -55,7 +55,7 @@ export default function HotelSelection() {
             );
           })}
         </HotelWrapper>
-        {selectedHotel ? (
+        {selectedHotel && (
           <>
             <Subtitle>Ótima pedida! Agora escolha seu quarto:</Subtitle>
             <RoomWrapper>
@@ -78,8 +78,6 @@ export default function HotelSelection() {
               ""
             )}
           </>
-        ) : (
-          ""
         )}
       </HotelPage>
     </>

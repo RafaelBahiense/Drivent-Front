@@ -10,6 +10,7 @@ const RoomButton = styled.button`
   border-radius: 4px;
   font-size: 14px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 `;
 
 const Subtitle = styled.p`

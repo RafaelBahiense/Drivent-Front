@@ -30,7 +30,7 @@ export default function HotelInformation() {
       <StyledTypography variant="h4">
         Escolha de hotel e quarto
       </StyledTypography>
-      {!userStatus?.room?.id ? (
+      {userStatus?.room?.id ? (
         <ResumeHotel userStatus={userStatus}/>
       ) : !userStatus?.payment?.id ? (
         <HasNoPayment />
