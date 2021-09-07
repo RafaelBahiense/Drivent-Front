@@ -27,6 +27,14 @@ const HotelPage = styled.div`
 const HotelWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 52px;
+  @media(max-width:850px) and (min-width:600px){
+    margin-bottom: 40px;
+  }
+  @media(max-width:600px){
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+  }
 `;
 
 export { RoomButton, Subtitle, HotelPage, HotelWrapper };

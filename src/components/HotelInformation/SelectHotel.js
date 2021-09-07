@@ -41,7 +41,7 @@ export default function HotelSelection() {
   return (
     <>
       <HotelPage>
-        <Subtitle>Primeiro, escolha seu hotel</Subtitle>
+        <Subtitle>Primeiro, escolha seu hotel:</Subtitle>
         <HotelWrapper>
           {hotelData.map((hotel) => {
             return (
