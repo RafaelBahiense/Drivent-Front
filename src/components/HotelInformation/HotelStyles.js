@@ -5,9 +5,10 @@ const HotelBox = styled.div`
   height: 264px;
   border-radius: 10px;
   background-color: ${(props) =>
-    props.checker[0] === props.checker[1] ? "#FFEED2" : "#F1F1F1"};
+    props.checker[0] === props.checker[1] || props.resumeHotel ? "#FFEED2" : "#F1F1F1"};
   margin-right: 19px;
   padding-left: 14px;
+  pointer-events: ${(props) => (props.resumeHotel ? "none" : "initial")};
 `;
 
 const HotelImage = styled.img`

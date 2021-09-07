@@ -6,6 +6,8 @@ import {
   HotelWrapper,
 } from "./HotelPageStyle";
 
+import { Redirect, useRouteMatch, useHistory } from "react-router-dom";
+
 import { useState, useEffect } from "react";
 import useApi from "../../hooks/useApi";
 import { RoomWrapper } from "./RoomInformation/RoomWrapper";
@@ -16,7 +18,7 @@ export default function HotelSelection() {
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [hotelData, setHotelData] = useState([]);
-
+  const history = useHistory();
   const api = useApi();
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function HotelSelection() {
     const promisse = api.reservation.postReservation(selectedRoom);
     promisse.then(() => {
       toast("Seu quarto foi reservado com sucesso!");
+      history.push("/dashboard/activities");
     });
     promisse.catch(() => {
       toast("Deu ruim filhão");
@@ -70,9 +73,7 @@ export default function HotelSelection() {
                 })}
             </RoomWrapper>
             {selectedRoom ? (
-              <RoomButton onClick={reservateRoom}>
-                RESERVAR QUARTO
-              </RoomButton>
+              <RoomButton onClick={reservateRoom}>RESERVAR QUARTO</RoomButton>
             ) : (
               ""
             )}
