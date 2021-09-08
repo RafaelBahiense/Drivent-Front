@@ -10,10 +10,10 @@ export default class ReservationApi extends AuthenticatedApi {
     });
   }
 
-  postReservation(roomId) {
+  postReservation(roomId, changeRoom) {
     return api.post(
       "/reservation/",
-      { roomId: roomId },
+      { roomId: roomId, changeRoom: changeRoom },
       {
         headers: {
           ...this.getAuthorizationHeader(),
