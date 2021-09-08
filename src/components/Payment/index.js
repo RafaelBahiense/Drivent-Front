@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 
+import TicketType from "./TicketType";
+import Subtitle from "../Shared/Subtitle";
+
 export default function PaymentInfos() {
   return (
     <>
