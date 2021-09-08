@@ -13,12 +13,17 @@ export default function PaymentInfos() {
   const [hasHotel, setHasHotel] = useState();
   const [isOnline, setIsOnline] = useState();
   const [prices, setPrices] = useState();
-  const { enrollment, ticketPrices } = useApi();
+  const { enrollment, ticketPrices, reservation } = useApi();
+  const [reservationData, setReservationData] = useState();
 
   useEffect(() => {
+    reservation.getUserReservation().then((res) => {
+      setReservationData(res.data);
+    });
+
     ticketPrices
       .getTicketPrices()
-      .then((res, req) => {
+      .then((res) => {
         setPrices(res.data);
       })
       .catch(() => {
@@ -38,7 +43,7 @@ export default function PaymentInfos() {
   if (!enrollmentData.address) return "Preecha suas informações!";
 
   let value = 0;
-
+  console.log(reservationData); //TIRAR
   if (isOnline) {
     value = prices?.online;
   } else {
@@ -51,9 +56,17 @@ export default function PaymentInfos() {
   function reserveTicket() {
     const body = {
       isPresencial: !isOnline,
-      hasHotel,
+      hasHotel: !!hasHotel,
     };
-    console.log("oi");
+    reservation
+      .postNewReservation(body)
+      .then((res) => {
+        toast("Ticket reservado.");
+        setReservationData(res.data);
+      })
+      .catch(() => {
+        toast("Algo deu errado.");
+      });
   }
 
   return (
