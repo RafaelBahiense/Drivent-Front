@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 
 import useApi from "../../hooks/useApi";
 import TicketType from "./TicketType";
-import Subtitle from "./Subtitle";
+import Subtitle from "../Shared/Subtitle";
 
 export default function PaymentInfos() {
   const [enrollmentData, setEnrollmentData] = useState();
