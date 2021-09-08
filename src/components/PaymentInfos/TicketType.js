@@ -22,18 +22,18 @@ export default function TicketType({
       >
         <Grid item>
           <TicketOptions
-            condition={condition}
+            condition={condition === undefined ? null : !condition}
             setCondition={setCondition}
-            setConditionTo={true}
+            setConditionTo={false}
             name={names[0]}
             price={prices[0]}
           />
         </Grid>
         <Grid item>
           <TicketOptions
-            condition={condition !== undefined ? !condition : undefined}
+            condition={condition === undefined ? null : condition}
             setCondition={setCondition}
-            setConditionTo={false}
+            setConditionTo={true}
             name={names[1]}
             price={prices[1]}
           />
