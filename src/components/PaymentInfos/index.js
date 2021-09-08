@@ -43,7 +43,7 @@ export default function PaymentInfos() {
   if (!enrollmentData.address) return "Preecha suas informações!";
 
   let value = 0;
-  console.log(reservationData); //TIRAR
+
   if (isOnline) {
     value = prices?.online;
   } else {
@@ -72,31 +72,37 @@ export default function PaymentInfos() {
   return (
     <>
       <TitleTypography variant="h4">Ingresso e pagamento</TitleTypography>
-      <TicketType
-        condition={isOnline}
-        setCondition={setIsOnline}
-        subtitle={"Primeiro, escolha sua modalidade de ingresso"}
-        names={["Presencial", "online"]}
-        prices={[prices?.presencial, prices?.online]}
-      />
-      {isOnline !== undefined ? (
-        isOnline ? (
-          <Resume value={value} reserveTicket={reserveTicket} />
-        ) : (
-          <>
-            <TicketType
-              condition={hasHotel}
-              setCondition={setHasHotel}
-              subtitle={"Ótimo! Agora escolha sua modalidade de hospedagem"}
-              names={["Sem Hotel", "Com Hotel"]}
-              prices={[0, prices?.hotel]}
-            />
-            {hasHotel !== undefined ? (
+      {reservationData ? (
+        "Payment under development"
+      ) : (
+        <>
+          <TicketType
+            condition={isOnline}
+            setCondition={setIsOnline}
+            subtitle={"Primeiro, escolha sua modalidade de ingresso"}
+            names={["Presencial", "online"]}
+            prices={[prices?.presencial, prices?.online]}
+          />
+          {isOnline !== undefined ? (
+            isOnline ? (
               <Resume value={value} reserveTicket={reserveTicket} />
-            ) : null}
-          </>
-        )
-      ) : null}
+            ) : (
+              <>
+                <TicketType
+                  condition={hasHotel}
+                  setCondition={setHasHotel}
+                  subtitle={"Ótimo! Agora escolha sua modalidade de hospedagem"}
+                  names={["Sem Hotel", "Com Hotel"]}
+                  prices={[0, prices?.hotel]}
+                />
+                {hasHotel !== undefined ? (
+                  <Resume value={value} reserveTicket={reserveTicket} />
+                ) : null}
+              </>
+            )
+          ) : null}
+        </>
+      )}
     </>
   );
 }
