@@ -4,7 +4,7 @@ import Subtitle from "./Subtitle";
 import TicketOptions from "./TicketOptions";
 
 export default function TicketType({
-  condition, //se true escolhe [1]
+  condition,
   setCondition,
   subtitle,
   names,

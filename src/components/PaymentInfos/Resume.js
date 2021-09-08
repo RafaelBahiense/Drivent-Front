@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-export default function Resume({ value }) {
+export default function Resume({ value, reserveTicket }) {
   return (
     <>
       <Description>
         Fechado! O total ficou em <span>R$ {value}.</span> Agora é só confirmar:
       </Description>
-      <ReserveButton>RESERVAR INGRESSO</ReserveButton>
+      <ReserveButton onClick={reserveTicket}>RESERVAR INGRESSO</ReserveButton>
     </>
   );
 }
@@ -34,4 +34,5 @@ const ReserveButton = styled.div`
   align-items: center;
   justify-content: center;
   color: black;
+  cursor: pointer;
 `;

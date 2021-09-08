@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 
@@ -6,6 +6,7 @@ import useApi from "../../hooks/useApi";
 import TicketType from "./TicketType";
 
 import { toast } from "react-toastify";
+import Resume from "./Resume";
 
 export default function PaymentInfos() {
   const [enrollmentData, setEnrollmentData] = useState();
@@ -47,6 +48,14 @@ export default function PaymentInfos() {
     }
   }
 
+  function reserveTicket() {
+    const body = {
+      isPresencial: !isOnline,
+      hasHotel,
+    };
+    console.log("oi");
+  }
+
   return (
     <>
       <TitleTypography variant="h4">Ingresso e pagamento</TitleTypography>
@@ -59,13 +68,7 @@ export default function PaymentInfos() {
       />
       {isOnline !== undefined ? (
         isOnline ? (
-          <>
-            <Description>
-              Fechado! O total ficou em <span>R$ {value}.</span> Agora é só
-              confirmar:
-            </Description>
-            <ReserveButton>RESERVAR INGRESSO</ReserveButton>
-          </>
+          <Resume value={value} reserveTicket={reserveTicket} />
         ) : (
           <>
             <TicketType
@@ -76,13 +79,7 @@ export default function PaymentInfos() {
               prices={[0, prices?.hotel]}
             />
             {hasHotel !== undefined ? (
-              <>
-                <Description>
-                  Fechado! O total ficou em <span>R$ {value}.</span> Agora é só
-                  confirmar:
-                </Description>
-                <ReserveButton>RESERVAR INGRESSO</ReserveButton>
-              </>
+              <Resume value={value} reserveTicket={reserveTicket} />
             ) : null}
           </>
         )
@@ -93,30 +90,4 @@ export default function PaymentInfos() {
 
 const TitleTypography = styled(Typography)`
   margin-bottom: 20px !important;
-`;
-
-const Description = styled.p`
-  font-size: 20px;
-  color: #8e8e8e;
-  font-family: "Roboto", sans-serif;
-  margin-top: 44px;
-  span {
-    font-weight: bold;
-  }
-`;
-
-const ReserveButton = styled.div`
-  width: 162px;
-  height: 37px;
-  margin-top: 17px;
-  border-radius: 4px;
-  background-color: #e0e0e0;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
-  font-family: "Roboto", sans-serif;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-  cursor: pointer;
 `;
