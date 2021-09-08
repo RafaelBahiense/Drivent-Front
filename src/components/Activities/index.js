@@ -4,6 +4,7 @@ import useApi from "../../hooks/useApi";
 
 import EventDayButton from "./EventDayButton";
 import { toast } from "react-toastify";
+import ActivityBox from "./ActivitiesBox";
 
 export default function SelectEventDay() {
   const [selectedDay, setSelectedDay] = useState({});
@@ -24,16 +25,19 @@ export default function SelectEventDay() {
   }, []);
 
   return (
-    <Wrapper>
-      <Subtitle>Primeiro filtre pelo dia do evento</Subtitle>
-      {eventDays.map((eventDay) => (
-        <EventDayButton
-          eventDay={eventDay}
-          setSelectedDay={setSelectedDay}
-          selectedDay={selectedDay}
-        />
-      ))}
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Subtitle>Primeiro filtre pelo dia do evento</Subtitle>
+        {eventDays.map((eventDay) => (
+          <EventDayButton
+            eventDay={eventDay}
+            setSelectedDay={setSelectedDay}
+            selectedDay={selectedDay}
+          />
+        ))}
+        <ActivityBox />
+      </Wrapper>
+    </>
   );
 }
 
