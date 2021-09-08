@@ -27,7 +27,8 @@ export default function Activities() {
         </ContainerMissingStepsMessage>
       ) : !userStatus[0]?.ticket?.isPresencial ? (
         <ContainerMissingStepsMessage>
-          
+          Sua modalidade de ingresso não necessita escolher atividade. Você terá
+          acesso a todas as atividades.
         </ContainerMissingStepsMessage>
       ) : (
         <SelectActivity />
