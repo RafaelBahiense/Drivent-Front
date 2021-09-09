@@ -1,25 +1,46 @@
 import styled from "styled-components";
 import Activity from "./Activity";
-export default function ActivityBox() {
+export default function ActivityBox({ eventDay }) {
+  console.log(eventDay);
   return (
     <>
       <Container>
         <ActivitySection>
           <PlaceName>Auditório Principal</PlaceName>
           <ActivityWrapper>
-            <Activity />
+            {eventDay.activities
+              .filter(
+                (activity) =>
+                  activity.activityPlace.name === "Auditório Principal"
+              )
+              .map((activity) => (
+                <Activity activity={activity} date={eventDay.date}/>
+              ))}
           </ActivityWrapper>
         </ActivitySection>
         <ActivitySection>
-          <PlaceName>Auditório Principal</PlaceName>
+          <PlaceName>Auditório Lateral</PlaceName>
           <ActivityWrapper>
-            <Activity />
+            {eventDay.activities
+              .filter(
+                (activity) =>
+                  activity.activityPlace.name === "Auditório Lateral"
+              )
+              .map((activity) => (
+                <Activity activity={activity} date={eventDay.date} />
+              ))}
           </ActivityWrapper>
         </ActivitySection>
         <ActivitySection>
-          <PlaceName>Auditório Principal</PlaceName>
+          <PlaceName>Sala de Workshop</PlaceName>
           <ActivityWrapper>
-            <Activity />
+            {eventDay.activities
+              .filter(
+                (activity) => activity.activityPlace.name === "Sala de Workshop"
+              )
+              .map((activity) => (
+                <Activity activity={activity} date={eventDay.date} />
+              ))}
           </ActivityWrapper>
         </ActivitySection>
       </Container>
@@ -38,14 +59,11 @@ const ActivityWrapper = styled.div`
   width: 100%;
   height: 390px;
   border: 1px solid #d7d7d7;
-  
 `;
 const Container = styled.div`
+  margin-top: 30px;
   display: flex;
 `;
 const ActivitySection = styled.div`
   width: 288px;
-  :nth-last-child(1){
-    border-right: none;
-  }
 `;

@@ -16,7 +16,7 @@ export default function EventDayButton({
 }
 
 const Button = styled.button`
-  width: 131px;
+  width: 151px;
   height: 37px;
   background: ${(props) =>
     props.checker[0] === props.checker[1] ? "#FFD37D" : "#e0e0e0"};

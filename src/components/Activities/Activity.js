@@ -2,15 +2,23 @@ import styled from "styled-components";
 import { BiLogIn } from "react-icons/bi";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from "react-icons/ai";
 import { useState } from "react";
+import dayjs from "dayjs";
 
-export default function Activity() {
+export default function Activity({ activity, date }) {
   const [places, setPlaces] = useState(2);
   const [enrolled, setEnrolled] = useState(false);
+
   return (
-    <ActivityCard enrolled={enrolled}>
+    <ActivityCard enrolled={enrolled} duration={activity.duration}>
       <ActivityInformationBox>
-        <ActivityTitle>Minecraft: montando o PC ideal</ActivityTitle>
-        <ActivityTime>09:00 - 10:00</ActivityTime>
+        <ActivityTitle>{activity.name}</ActivityTitle>
+        <ActivityTime>
+          {dayjs(`${date} ${activity.time}`).format("HH:mm") +
+            " - " +
+            dayjs(`${date} ${activity.time}`)
+              .add(activity.duration, "minute")
+              .format("HH:mm")}
+        </ActivityTime>
       </ActivityInformationBox>
       <PlaceInformationBox places={places}>
         {enrolled ? (
@@ -21,7 +29,7 @@ export default function Activity() {
         ) : places > 0 ? (
           <>
             <BiLogIn className="icon" />
-            <NumberOfPlaces>27 vagas</NumberOfPlaces>
+            <NumberOfPlaces>{activity.totalSeats} vagas</NumberOfPlaces>
           </>
         ) : (
           <>
@@ -35,7 +43,7 @@ export default function Activity() {
 }
 const ActivityCard = styled.div`
   width: 265px;
-  height: 80px;
+  height: ${props => `${props.duration/60 * 80}px`};
   background-color: ${(props) => (props.enrolled ? "#D0FFDB" : "#F1F1F1")};
   margin: 10px auto;
   border-radius: 5px;

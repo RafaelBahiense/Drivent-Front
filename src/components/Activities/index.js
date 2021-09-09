@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import ActivityBox from "./ActivitiesBox";
 
 export default function SelectEventDay() {
-  const [selectedDay, setSelectedDay] = useState({});
+  const [selectedDay, setSelectedDay] = useState();
   const [eventDays, setEventDays] = useState([]);
 
   const api = useApi();
@@ -24,6 +24,7 @@ export default function SelectEventDay() {
     });
   }, []);
 
+  console.log(eventDays);
   return (
     <>
       <Wrapper>
@@ -35,7 +36,9 @@ export default function SelectEventDay() {
             selectedDay={selectedDay}
           />
         ))}
-        <ActivityBox />
+        {selectedDay && <ActivityBox
+          eventDay={eventDays.filter((day) => day.id === selectedDay)[0]}
+        />}
       </Wrapper>
     </>
   );

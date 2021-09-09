@@ -21,7 +21,7 @@ export default function Activities() {
   return (
     <>
       <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
-      {/* {!userStatus[0]?.payment?.id ? (
+      {!userStatus[0]?.payment?.id ? (
         <ContainerMissingStepsMessage>
           Você precisa ter confirmado o pagamento antes <br /> de fazer a
           escolha de atividades.
@@ -33,8 +33,7 @@ export default function Activities() {
         </ContainerMissingStepsMessage>
       ) : (
         <SelectEventDay />
-      )} */}
-      <SelectEventDay />
+      )}
     </>
   );
 }
@@ -42,4 +41,3 @@ export default function Activities() {
 const StyledTypography = styled(Typography)`
   margin-bottom: 20px !important;
 `;
-
