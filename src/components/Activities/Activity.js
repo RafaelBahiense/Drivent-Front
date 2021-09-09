@@ -1,14 +1,40 @@
 import styled from "styled-components";
 import { BiLogIn } from "react-icons/bi";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from "react-icons/ai";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+
+import useApi from "../../hooks/useApi";
+import UserContext from "../../contexts/UserContext";
 
 export default function Activity({ activity, date }) {
   const [places, setPlaces] = useState(
     activity.totalSeats - activity.users.length
   );
   const [enrolled, setEnrolled] = useState(false);
+  const { userData } = useContext(UserContext);
+  console.log(activity);
+
+  const api = useApi();
+
+  useEffect(() => {
+    const foundSeatReservation = activity.users.find(
+      (user) => user.userId === userData.user.id
+    );
+    if (foundSeatReservation) {
+      setEnrolled(true);
+    }
+  }, []);
+
+  function reservateSeat() {
+    const request = api.activity.saveSeatReservation(activity.id);
+    request.then(() => {
+      setEnrolled(!enrolled);
+    });
+    request.catch(() => {
+      console.log("deu ruim");
+    });
+  }
 
   return (
     <ActivityCard enrolled={enrolled} duration={activity.duration}>
@@ -22,7 +48,7 @@ export default function Activity({ activity, date }) {
               .format("HH:mm")}
         </ActivityTime>
       </ActivityInformationBox>
-      <PlaceInformationBox places={places}>
+      <PlaceInformationBox enrolled={enrolled} places={places}>
         {enrolled ? (
           <>
             <AiOutlineCheckCircle className="icon" />
@@ -30,7 +56,7 @@ export default function Activity({ activity, date }) {
           </>
         ) : places > 0 ? (
           <>
-            <BiLogIn className="icon" />
+            <BiLogIn className="icon" onClick={() => reservateSeat()} />
             <NumberOfPlaces>
               {places > 1 ? places + " vagas" : places + " vaga"}
             </NumberOfPlaces>
@@ -71,7 +97,7 @@ const ActivityInformationBox = styled.div`
   margin-left: 10px;
 `;
 const PlaceInformationBox = styled.div`
-  color: ${(props) => (props.places > 0 ? "#078632" : "#CC6666")};
+  color: ${(props) => (props.enrolled || props.places > 0   ? "#078632" : "#CC6666")};
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -15,6 +15,7 @@ export default function SelectEventDay() {
   useEffect(() => {
     const response = api.activity.getActivities();
     response.then((data) => {
+      console.log(data.data);
       setEventDays(data.data);
     });
     response.catch(() => {
