@@ -24,13 +24,13 @@ export default function SelectEventDay() {
     });
   }, []);
 
-  console.log(eventDays);
   return (
     <>
       <Wrapper>
         <Subtitle>Primeiro filtre pelo dia do evento</Subtitle>
         {eventDays.map((eventDay) => (
           <EventDayButton
+            key={eventDay.id}
             eventDay={eventDay}
             setSelectedDay={setSelectedDay}
             selectedDay={selectedDay}

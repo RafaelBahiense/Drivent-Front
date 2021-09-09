@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Activity from "./Activity";
 export default function ActivityBox({ eventDay }) {
-  console.log(eventDay);
   return (
     <>
       <Container>
@@ -14,7 +13,7 @@ export default function ActivityBox({ eventDay }) {
                   activity.activityPlace.name === "Auditório Principal"
               )
               .map((activity) => (
-                <Activity activity={activity} date={eventDay.date}/>
+                <Activity key={activity.id} activity={activity} date={eventDay.date}/>
               ))}
           </ActivityWrapper>
         </ActivitySection>
@@ -27,7 +26,7 @@ export default function ActivityBox({ eventDay }) {
                   activity.activityPlace.name === "Auditório Lateral"
               )
               .map((activity) => (
-                <Activity activity={activity} date={eventDay.date} />
+                <Activity key={activity.id} activity={activity} date={eventDay.date} />
               ))}
           </ActivityWrapper>
         </ActivitySection>
@@ -39,7 +38,7 @@ export default function ActivityBox({ eventDay }) {
                 (activity) => activity.activityPlace.name === "Sala de Workshop"
               )
               .map((activity) => (
-                <Activity activity={activity} date={eventDay.date} />
+                <Activity key={activity.id} activity={activity} date={eventDay.date} />
               ))}
           </ActivityWrapper>
         </ActivitySection>
