@@ -11,12 +11,15 @@ export default function PaymentInfos() {
   const [isOnline, setIsOnline] = useState();
   const [prices, setPrices] = useState();
   const [reservationData, setReservationData] = useState();
-  const [ticketSelected, setTicketSelected] = useState(false);
   const { enrollment, ticketPrices, reservation } = useApi();
 
   useEffect(() => {
     reservation.getUserReservation().then((res) => {
       setReservationData(res.data);
+      if (res.data) {
+        setIsOnline(!res.data.ticket.isPresencial);
+        setHasHotel(res.data.ticket.hasHotel);
+      }
     });
 
     ticketPrices
@@ -65,7 +68,6 @@ export default function PaymentInfos() {
       .catch(() => {
         toast("Algo deu errado.");
       });
-    setTicketSelected(true);
   }
 
   const ticketSelectionObj = {
@@ -87,7 +89,7 @@ export default function PaymentInfos() {
 
   return (
     <>
-      {ticketSelected ? (
+      {reservationData ? (
         <CreditCard {...ticketInfos} />
       ) : (
         <TicketSelection {...ticketSelectionObj} />

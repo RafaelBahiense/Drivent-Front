@@ -1,7 +1,7 @@
 import TicketType from "./TicketType";
 import Title from "./Title";
 
-import Resume from "./Resume";
+import ResumeCheckout from "./ResumeCheckout";
 
 export default function TicketSelection({
   reservationData,
@@ -29,7 +29,7 @@ export default function TicketSelection({
           />
           {isOnline !== undefined ? (
             isOnline ? (
-              <Resume value={value} reserveTicket={reserveTicket} />
+              <ResumeCheckout value={value} reserveTicket={reserveTicket} />
             ) : (
               <>
                 <TicketType
@@ -40,7 +40,7 @@ export default function TicketSelection({
                   prices={[0, prices?.hotel]}
                 />
                 {hasHotel !== undefined ? (
-                  <Resume value={value} reserveTicket={reserveTicket} />
+                  <ResumeCheckout value={value} reserveTicket={reserveTicket} />
                 ) : null}
               </>
             )

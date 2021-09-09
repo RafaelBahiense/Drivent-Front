@@ -9,9 +9,7 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
       <TicketResume>
         {isOnline
           ? "Online"
-          : "Presencial" + hasHotel
-            ? " + Com Hotel"
-            : " + Com Hotel"}
+          : `Presencial + ${hasHotel ? "Com Hotel" : "Sem Hotel"}`}
         <span>{`R$ ${value}`}</span>
       </TicketResume>
     </>
@@ -33,6 +31,7 @@ const TicketResume = styled.div`
   background-color: #ffeed2;
 
   span {
+    margin-top: 5px;
     color: #898989;
   }
 `;
