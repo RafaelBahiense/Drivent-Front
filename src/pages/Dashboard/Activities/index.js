@@ -41,4 +41,3 @@ export default function Activities() {
 const StyledTypography = styled(Typography)`
   margin-bottom: 20px !important;
 `;
-
