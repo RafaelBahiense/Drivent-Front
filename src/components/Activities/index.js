@@ -8,7 +8,6 @@ import ActivityBox from "./ActivitiesBox";
 
 export default function SelectEventDay() {
   const [selectedDay, setSelectedDay] = useState();
-
   const [eventDays, setEventDays] = useState([]);
 
   const api = useApi();
