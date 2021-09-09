@@ -1,24 +1,25 @@
-import { useEffect, useState, useContext } from "react";
-import styled from "styled-components";
-import Typography from "@material-ui/core/Typography";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import useApi from "../../hooks/useApi";
-import TicketType from "./TicketType";
-
-import { toast } from "react-toastify";
-import Resume from "./Resume";
+import TicketSelection from "./TicketSelection";
+import CreditCard from "./CreditCard";
 
 export default function PaymentInfos() {
   const [enrollmentData, setEnrollmentData] = useState();
   const [hasHotel, setHasHotel] = useState();
   const [isOnline, setIsOnline] = useState();
   const [prices, setPrices] = useState();
-  const { enrollment, ticketPrices, reservation } = useApi();
   const [reservationData, setReservationData] = useState();
+  const { enrollment, ticketPrices, reservation } = useApi();
 
   useEffect(() => {
     reservation.getUserReservation().then((res) => {
       setReservationData(res.data);
+      if (res.data) {
+        setIsOnline(!res.data.ticket.isPresencial);
+        setHasHotel(res.data.ticket.hasHotel);
+      }
     });
 
     ticketPrices
@@ -69,44 +70,30 @@ export default function PaymentInfos() {
       });
   }
 
+  const ticketSelectionObj = {
+    reservationData,
+    isOnline,
+    setIsOnline,
+    prices,
+    value,
+    reserveTicket,
+    hasHotel,
+    setHasHotel,
+  };
+
+  const ticketInfos = {
+    isOnline,
+    hasHotel,
+    value,
+  };
+
   return (
     <>
-      <TitleTypography variant="h4">Ingresso e pagamento</TitleTypography>
       {reservationData ? (
-        "Payment under development"
+        <CreditCard {...ticketInfos} />
       ) : (
-        <>
-          <TicketType
-            condition={isOnline}
-            setCondition={setIsOnline}
-            subtitle={"Primeiro, escolha sua modalidade de ingresso"}
-            names={["Presencial", "online"]}
-            prices={[prices?.presencial, prices?.online]}
-          />
-          {isOnline !== undefined ? (
-            isOnline ? (
-              <Resume value={value} reserveTicket={reserveTicket} />
-            ) : (
-              <>
-                <TicketType
-                  condition={hasHotel}
-                  setCondition={setHasHotel}
-                  subtitle={"Ótimo! Agora escolha sua modalidade de hospedagem"}
-                  names={["Sem Hotel", "Com Hotel"]}
-                  prices={[0, prices?.hotel]}
-                />
-                {hasHotel !== undefined ? (
-                  <Resume value={value} reserveTicket={reserveTicket} />
-                ) : null}
-              </>
-            )
-          ) : null}
-        </>
+        <TicketSelection {...ticketSelectionObj} />
       )}
     </>
   );
 }
-
-const TitleTypography = styled(Typography)`
-  margin-bottom: 20px !important;
-`;
