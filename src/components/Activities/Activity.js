@@ -5,7 +5,9 @@ import { useState } from "react";
 import dayjs from "dayjs";
 
 export default function Activity({ activity, date }) {
-  const [places, setPlaces] = useState(2);
+  const [places, setPlaces] = useState(
+    activity.totalSeats - activity.users.length
+  );
   const [enrolled, setEnrolled] = useState(false);
 
   return (
@@ -29,7 +31,9 @@ export default function Activity({ activity, date }) {
         ) : places > 0 ? (
           <>
             <BiLogIn className="icon" />
-            <NumberOfPlaces>{activity.totalSeats} vagas</NumberOfPlaces>
+            <NumberOfPlaces>
+              {places > 1 ? places + " vagas" : places + " vaga"}
+            </NumberOfPlaces>
           </>
         ) : (
           <>
@@ -43,7 +47,7 @@ export default function Activity({ activity, date }) {
 }
 const ActivityCard = styled.div`
   width: 265px;
-  height: ${props => `${props.duration/60 * 80}px`};
+  height: ${(props) => `${(props.duration / 60) * 80}px`};
   background-color: ${(props) => (props.enrolled ? "#D0FFDB" : "#F1F1F1")};
   margin: 10px auto;
   border-radius: 5px;
