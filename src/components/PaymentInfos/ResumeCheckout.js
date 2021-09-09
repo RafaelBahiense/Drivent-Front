@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function Resume({ value, reserveTicket }) {
+export default function ResumeCheckout({ value, reserveTicket }) {
   return (
     <>
       <Description>
