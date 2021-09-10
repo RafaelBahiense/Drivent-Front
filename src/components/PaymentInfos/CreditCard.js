@@ -10,6 +10,7 @@ import Subtitle from "./Subtitle";
 import ConfirmButton from "./ConfirmButton";
 import { toast } from "react-toastify";
 import useApi from "../../hooks/useApi";
+import Done from "./Done";
 
 export default function CreditCard({
   isOnline,
@@ -78,57 +79,66 @@ export default function CreditCard({
         <span>{`R$ ${value}`}</span>
       </TicketResume>
       <Subtitle text={"Pagamento"} />
-      <PaymentInfo>
-        <CardContainer>
-          <Cards
-            cvc={cardInfo.cvc}
-            expiry={cardInfo.expiry}
-            focused={cardInfo.focus}
-            name={cardInfo.name}
-            number={cardInfo.number}
-          />
-        </CardContainer>
-        <PaymentForm>
-          <div>
-            <PaymentInput
-              type="tel"
-              name="number"
-              placeholder="Número do cartão"
-              onChange={handleInputChange}
-              onFocus={handleInputFocus}
-            />
-            <p>E.g.: 49..., 51..., 36..., 37...</p>
-          </div>
-          <PaymentInput
-            type="text"
-            name="name"
-            placeholder="Nome"
-            onChange={handleInputChange}
-            onFocus={handleInputFocus}
-          />
-          <div className="row">
-            <div className="expire">
+      {reservationData.paymentId ? (
+        <Done />
+      ) : (
+        <>
+          <PaymentInfo>
+            <CardContainer>
+              <Cards
+                cvc={cardInfo.cvc}
+                expiry={cardInfo.expiry}
+                focused={cardInfo.focus}
+                name={cardInfo.name}
+                number={cardInfo.number}
+              />
+            </CardContainer>
+            <PaymentForm>
+              <div>
+                <PaymentInput
+                  type="tel"
+                  name="number"
+                  placeholder="Número do cartão"
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                />
+                <p>E.g.: 49..., 51..., 36..., 37...</p>
+              </div>
               <PaymentInput
-                type="tel"
-                name="expiry"
-                placeholder="Valido Até"
+                type="text"
+                name="name"
+                placeholder="Nome"
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
               />
-            </div>
-            <div className="cvc">
-              <PaymentInput
-                type="tel"
-                name="cvc"
-                placeholder="CVC"
-                onChange={handleInputChange}
-                onFocus={handleInputFocus}
-              />
-            </div>
-          </div>
-        </PaymentForm>
-      </PaymentInfo>
-      <ConfirmButton text={"FINALIZAR PAGAMENTO"} onClick={ConfirmPayment} />
+              <div className="row">
+                <div className="expire">
+                  <PaymentInput
+                    type="tel"
+                    name="expiry"
+                    placeholder="Valido Até"
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus}
+                  />
+                </div>
+                <div className="cvc">
+                  <PaymentInput
+                    type="tel"
+                    name="cvc"
+                    placeholder="CVC"
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus}
+                  />
+                </div>
+              </div>
+            </PaymentForm>
+          </PaymentInfo>
+          <ConfirmButton
+            text={"FINALIZAR PAGAMENTO"}
+            onClick={ConfirmPayment}
+          />
+        </>
+      )}
     </>
   );
 }

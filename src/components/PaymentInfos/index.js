@@ -93,11 +93,7 @@ export default function PaymentInfos() {
   return (
     <>
       {reservationData ? (
-        reservationData.paymentId ? (
-          "done"
-        ) : (
-          <CreditCard {...ticketInfos} />
-        )
+        <CreditCard {...ticketInfos} />
       ) : (
         <TicketSelection {...ticketSelectionObj} />
       )}
