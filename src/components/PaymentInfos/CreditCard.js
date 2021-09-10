@@ -40,16 +40,16 @@ export default function CreditCard({
 
   function ConfirmPayment() {
     if (!pattern.number.test(cardInfo.number) || cardInfo.number.length > 16) {
-      toast("Número do cartão inválido");
+      return toast("Número do cartão inválido");
     }
     if (!pattern.name.test(cardInfo.name)) {
-      toast("Nome inválido");
+      return toast("Nome inválido");
     }
     if (!pattern.expiry.test(cardInfo.expiry)) {
-      toast("Validade incorreta");
+      return toast("Validade incorreta");
     }
     if (!pattern.cvc.test(cardInfo.cvc) || cardInfo.cvc.length > 3) {
-      toast("CVC inválido");
+      return toast("CVC inválido");
     }
 
     payment
