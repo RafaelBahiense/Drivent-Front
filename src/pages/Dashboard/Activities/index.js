@@ -21,12 +21,12 @@ export default function Activities() {
   return (
     <>
       <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
-      {!userStatus[0]?.payment?.id ? (
+      {!userStatus?.payment?.id ? (
         <ContainerMissingStepsMessage>
           Você precisa ter confirmado o pagamento antes <br /> de fazer a
           escolha de atividades.
         </ContainerMissingStepsMessage>
-      ) : !userStatus[0]?.ticket?.isPresencial ? (
+      ) : !userStatus?.ticket?.isPresencial ? (
         <ContainerMissingStepsMessage>
           Sua modalidade de ingresso não necessita escolher atividade. Você terá
           acesso a todas as atividades.
