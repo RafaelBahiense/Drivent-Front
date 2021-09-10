@@ -14,7 +14,6 @@ export default function Activity({ activity, date }) {
   );
   const [enrolled, setEnrolled] = useState(false);
   const { userData } = useContext(UserContext);
-  console.log(activity);
 
   const api = useApi();
 
@@ -63,7 +62,7 @@ export default function Activity({ activity, date }) {
       setPlaces(activity.totalSeats - activity.users.length);
     });
     request.catch((error) => {
-      console.log(error);
+      toast("Houve um erro ao retirar a sua reserva. Tente novamente em alguns segundos.");
     });
   }
 
