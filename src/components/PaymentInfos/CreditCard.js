@@ -9,13 +9,16 @@ import Title from "./Title";
 import Subtitle from "./Subtitle";
 import ConfirmButton from "./ConfirmButton";
 import { toast } from "react-toastify";
+import useApi from "../../hooks/useApi";
 
 export default function CreditCard({
   isOnline,
   hasHotel,
   value,
-  reservationId,
+  reservationData,
+  setReservationData,
 }) {
+  const { payment } = useApi();
   const [cardInfo, setCardInfo] = useState({
     cvc: "",
     expiry: "",
@@ -48,7 +51,13 @@ export default function CreditCard({
       toast("CVC inválido");
     }
 
-    //passar valor e reservationId
+    payment.postPayment(value, reservationData.id).then((res) => {
+      setReservationData({
+        ...reservationData,
+        payment: res.data,
+        paymentId: res.data.id,
+      });
+    });
   }
 
   const pattern = {

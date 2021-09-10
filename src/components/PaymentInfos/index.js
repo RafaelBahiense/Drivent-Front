@@ -86,7 +86,8 @@ export default function PaymentInfos() {
     isOnline,
     hasHotel,
     value,
-    reservationId: reservationData?.id,
+    reservationData,
+    setReservationData,
   };
 
   return (
