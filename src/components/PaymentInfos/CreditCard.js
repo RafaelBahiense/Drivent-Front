@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 import Title from "./Title";
 import Subtitle from "./Subtitle";
+import ConfirmButton from "./ConfirmButton";
 
 export default function CreditCard({ isOnline, hasHotel, value }) {
   const [cardInfo, setCardInfo] = useState({
@@ -25,6 +26,10 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
     const { name, value } = e.target;
 
     setCardInfo({ ...cardInfo, [name]: value });
+  }
+
+  function ConfirmPayment() {
+    alert("hiiiii");
   }
 
   return (
@@ -99,6 +104,7 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
           </div>
         </PaymentForm>
       </PaymentInfo>
+      <ConfirmButton text={"FINALIZAR PAGAMENTO"} onClick={ConfirmPayment} />
     </>
   );
 }
@@ -109,6 +115,7 @@ const CardContainer = styled.div`
 
 const PaymentInfo = styled.div`
   display: flex;
+  margin-bottom: 40px;
 `;
 
 const PaymentForm = styled.form`
