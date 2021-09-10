@@ -1,14 +1,70 @@
 import styled from "styled-components";
 import { BiLogIn } from "react-icons/bi";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from "react-icons/ai";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
+
+import useApi from "../../hooks/useApi";
+import UserContext from "../../contexts/UserContext";
 
 export default function Activity({ activity, date }) {
   const [places, setPlaces] = useState(
     activity.totalSeats - activity.users.length
   );
   const [enrolled, setEnrolled] = useState(false);
+  const { userData } = useContext(UserContext);
+
+  const api = useApi();
+
+  useEffect(() => {
+    const foundSeatReservation = activity.users.find(
+      (user) => user.userId === userData.user.id
+    );
+    if (foundSeatReservation) {
+      setEnrolled(true);
+    }
+  }, []);
+
+  function reservateSeat() {
+    const request = api.activity.saveSeatReservation(activity.id);
+    request.then(() => {
+      setEnrolled(!enrolled);
+      activity.users.push({
+        userId: userData.user.id,
+        activityId: activity.id,
+      });
+    });
+
+    request.catch((error) => {
+      if (error.response.status === 409) {
+        toast(
+          "Erro! Você já está inscrito em uma atividade neste mesmo horário"
+        );
+      }
+    });
+  }
+
+  function deleteSeat() {
+    const request = api.activity.deleteSeatReservation(activity.id);
+    request.then(() => {
+      setEnrolled(!enrolled);
+      activity.users = activity.users.filter((user) => {
+        if (
+          user.userId === userData.user.id &&
+          user.activityId === activity.id
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+      setPlaces(activity.totalSeats - activity.users.length);
+    });
+    request.catch((error) => {
+      toast("Houve um erro ao retirar a sua reserva. Tente novamente em alguns segundos.");
+    });
+  }
 
   return (
     <ActivityCard enrolled={enrolled} duration={activity.duration}>
@@ -22,15 +78,18 @@ export default function Activity({ activity, date }) {
               .format("HH:mm")}
         </ActivityTime>
       </ActivityInformationBox>
-      <PlaceInformationBox places={places}>
+      <PlaceInformationBox enrolled={enrolled} places={places}>
         {enrolled ? (
           <>
-            <AiOutlineCheckCircle className="icon" />
+            <AiOutlineCheckCircle
+              className="icon"
+              onClick={() => deleteSeat()}
+            />
             <NumberOfPlaces>Inscrito</NumberOfPlaces>
           </>
         ) : places > 0 ? (
           <>
-            <BiLogIn className="icon" />
+            <BiLogIn className="icon" onClick={() => reservateSeat()} />
             <NumberOfPlaces>
               {places > 1 ? places + " vagas" : places + " vaga"}
             </NumberOfPlaces>
@@ -71,13 +130,15 @@ const ActivityInformationBox = styled.div`
   margin-left: 10px;
 `;
 const PlaceInformationBox = styled.div`
-  color: ${(props) => (props.places > 0 ? "#078632" : "#CC6666")};
+  color: ${(props) =>
+    props.enrolled || props.places > 0 ? "#078632" : "#CC6666"};
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 65px;
   .icon {
     font-size: 22px;
+    cursor: pointer;
   }
 `;
 const NumberOfPlaces = styled.p`
