@@ -14,7 +14,7 @@ export default function PaymentInfos() {
   const { enrollment, ticketPrices, reservation } = useApi();
 
   useEffect(() => {
-    reservation.getUserReservation().then((res) => {
+    reservation.getReservationInfo().then((res) => {
       setReservationData(res.data);
       if (res.data) {
         setIsOnline(!res.data.ticket.isPresencial);
