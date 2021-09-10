@@ -11,6 +11,7 @@ export default function PaymentInfos() {
   const [isOnline, setIsOnline] = useState();
   const [prices, setPrices] = useState();
   const [reservationData, setReservationData] = useState();
+  const [value, setValue] = useState(0);
   const { enrollment, ticketPrices, reservation } = useApi();
 
   useEffect(() => {
@@ -40,19 +41,19 @@ export default function PaymentInfos() {
     });
   }, []);
 
+  useEffect(() => {
+    if (isOnline) {
+      setValue(prices?.online);
+    } else {
+      setValue(prices?.presencial);
+      if (hasHotel) {
+        setValue(prices?.presencial + prices?.hotel);
+      }
+    }
+  }, [isOnline, hasHotel]);
+
   if (!enrollmentData) return "Carregando...";
   if (!enrollmentData.address) return "Preecha suas informações!";
-
-  let value = 0;
-
-  if (isOnline) {
-    value = prices?.online;
-  } else {
-    value += prices?.presencial;
-    if (hasHotel) {
-      value += prices?.hotel;
-    }
-  }
 
   function reserveTicket() {
     const body = {
@@ -85,12 +86,17 @@ export default function PaymentInfos() {
     isOnline,
     hasHotel,
     value,
+    reservationId: reservationData?.id,
   };
 
   return (
     <>
       {reservationData ? (
-        <CreditCard {...ticketInfos} />
+        reservationData.paymentId ? (
+          "done"
+        ) : (
+          <CreditCard {...ticketInfos} />
+        )
       ) : (
         <TicketSelection {...ticketSelectionObj} />
       )}

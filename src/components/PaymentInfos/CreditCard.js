@@ -10,7 +10,12 @@ import Subtitle from "./Subtitle";
 import ConfirmButton from "./ConfirmButton";
 import { toast } from "react-toastify";
 
-export default function CreditCard({ isOnline, hasHotel, value }) {
+export default function CreditCard({
+  isOnline,
+  hasHotel,
+  value,
+  reservationId,
+}) {
   const [cardInfo, setCardInfo] = useState({
     cvc: "",
     expiry: "",
@@ -18,8 +23,6 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
     name: "",
     number: "",
   });
-
-  //checar se já não há um pagamento
 
   function handleInputFocus(e) {
     setCardInfo({ ...cardInfo, focus: e.target.name });
@@ -44,6 +47,8 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
     if (!pattern.cvc.test(cardInfo.cvc) || cardInfo.cvc.length > 3) {
       toast("CVC inválido");
     }
+
+    //passar valor e reservationId
   }
 
   const pattern = {
