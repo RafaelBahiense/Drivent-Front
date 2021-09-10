@@ -47,7 +47,7 @@ export default function Room({ room, selectedRoom, setSelectedRoom }) {
 }
 
 const RoomCard = styled.button`
-  cursor:  ${(props) => (props.disabled ?"initial" : "pointer")};
+  cursor: ${(props) => (props.disabled ? "initial" : "pointer")};
   width: 190px;
   height: 45px;
   border: 1px solid #cecece;

@@ -36,12 +36,34 @@ export default function Activity({ activity, date }) {
         activityId: activity.id,
       });
     });
+
     request.catch((error) => {
       if (error.response.status === 409) {
         toast(
           "Erro! Você já está inscrito em uma atividade neste mesmo horário"
         );
       }
+    });
+  }
+
+  function deleteSeat() {
+    const request = api.activity.deleteSeatReservation(activity.id);
+    request.then(() => {
+      setEnrolled(!enrolled);
+      activity.users = activity.users.filter((user) => {
+        if (
+          user.userId === userData.user.id &&
+          user.activityId === activity.id
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+      setPlaces(activity.totalSeats - activity.users.length);
+    });
+    request.catch((error) => {
+      console.log(error);
     });
   }
 
@@ -60,7 +82,10 @@ export default function Activity({ activity, date }) {
       <PlaceInformationBox enrolled={enrolled} places={places}>
         {enrolled ? (
           <>
-            <AiOutlineCheckCircle className="icon" />
+            <AiOutlineCheckCircle
+              className="icon"
+              onClick={() => deleteSeat()}
+            />
             <NumberOfPlaces>Inscrito</NumberOfPlaces>
           </>
         ) : places > 0 ? (
@@ -114,6 +139,7 @@ const PlaceInformationBox = styled.div`
   width: 65px;
   .icon {
     font-size: 22px;
+    cursor: pointer;
   }
 `;
 const NumberOfPlaces = styled.p`

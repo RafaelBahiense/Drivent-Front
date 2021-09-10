@@ -21,4 +21,16 @@ export default class ActivitiesApi extends AuthenticatedApi {
       }
     );
   }
+  
+  deleteSeatReservation(activityId) {
+    return api.post(
+      "/activities/delete",
+      { activityId: activityId },
+      {
+        headers: {
+          ...this.getAuthorizationHeader(),
+        },
+      }
+    );
+  }
 }
