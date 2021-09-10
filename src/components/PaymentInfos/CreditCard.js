@@ -8,6 +8,7 @@ import styled from "styled-components";
 import Title from "./Title";
 import Subtitle from "./Subtitle";
 import ConfirmButton from "./ConfirmButton";
+import { toast } from "react-toastify";
 
 export default function CreditCard({ isOnline, hasHotel, value }) {
   const [cardInfo, setCardInfo] = useState({
@@ -17,6 +18,8 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
     name: "",
     number: "",
   });
+
+  //checar se já não há um pagamento
 
   function handleInputFocus(e) {
     setCardInfo({ ...cardInfo, focus: e.target.name });
@@ -29,8 +32,26 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
   }
 
   function ConfirmPayment() {
-    alert("hiiiii");
+    if (!pattern.number.test(cardInfo.number) || cardInfo.number.length > 16) {
+      toast("Número do cartão inválido");
+    }
+    if (!pattern.name.test(cardInfo.name)) {
+      toast("Nome inválido");
+    }
+    if (!pattern.expiry.test(cardInfo.expiry)) {
+      toast("Validade incorreta");
+    }
+    if (!pattern.cvc.test(cardInfo.cvc) || cardInfo.cvc.length > 3) {
+      toast("CVC inválido");
+    }
   }
+
+  const pattern = {
+    number: new RegExp("[0-9]{16}"),
+    name: new RegExp("^[a-zA-Z ]*$"),
+    expiry: new RegExp("[0-9][0-9]/[0-9][0-9]"),
+    cvc: new RegExp("[0-9]{3}"),
+  };
 
   return (
     <>
@@ -59,9 +80,6 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
               type="tel"
               name="number"
               placeholder="Número do cartão"
-              className="form-control" //
-              pattern="[\d| ]{16,22}" //
-              required //
               onChange={handleInputChange}
               onFocus={handleInputFocus}
             />
@@ -71,8 +89,6 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
             type="text"
             name="name"
             placeholder="Nome"
-            className="form-control" //
-            required //
             onChange={handleInputChange}
             onFocus={handleInputFocus}
           />
@@ -81,10 +97,7 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
               <PaymentInput
                 type="tel"
                 name="expiry"
-                className="form-control"
                 placeholder="Valido Até"
-                pattern="\d\d/\d\d"
-                required
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
               />
@@ -93,10 +106,7 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
               <PaymentInput
                 type="tel"
                 name="cvc"
-                className="form-control"
                 placeholder="CVC"
-                pattern="\d{3,4}"
-                required
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
               />
