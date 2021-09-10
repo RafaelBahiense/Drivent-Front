@@ -7,8 +7,19 @@ import styled from "styled-components";
 
 import Title from "./Title";
 import Subtitle from "./Subtitle";
+import ConfirmButton from "./ConfirmButton";
+import { toast } from "react-toastify";
+import useApi from "../../hooks/useApi";
+import Done from "./Done";
 
-export default function CreditCard({ isOnline, hasHotel, value }) {
+export default function CreditCard({
+  isOnline,
+  hasHotel,
+  value,
+  reservationData,
+  setReservationData,
+}) {
+  const { payment } = useApi();
   const [cardInfo, setCardInfo] = useState({
     cvc: "",
     expiry: "",
@@ -27,6 +38,38 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
     setCardInfo({ ...cardInfo, [name]: value });
   }
 
+  function ConfirmPayment() {
+    if (!pattern.number.test(cardInfo.number) || cardInfo.number.length > 16) {
+      toast("Número do cartão inválido");
+    }
+    if (!pattern.name.test(cardInfo.name)) {
+      toast("Nome inválido");
+    }
+    if (!pattern.expiry.test(cardInfo.expiry)) {
+      toast("Validade incorreta");
+    }
+    if (!pattern.cvc.test(cardInfo.cvc) || cardInfo.cvc.length > 3) {
+      toast("CVC inválido");
+    }
+
+    payment
+      .postPayment({ value, reservationId: reservationData.id })
+      .then((res) => {
+        setReservationData({
+          ...reservationData,
+          payment: res.data,
+          paymentId: res.data.id,
+        });
+      });
+  }
+
+  const pattern = {
+    number: new RegExp("[0-9]{16}"),
+    name: new RegExp("^[a-zA-Z ]*$"),
+    expiry: new RegExp("[0-9][0-9]/[0-9][0-9]"),
+    cvc: new RegExp("[0-9]{3}"),
+  };
+
   return (
     <>
       <Title text={"Ingresso escolhido"} />
@@ -38,67 +81,66 @@ export default function CreditCard({ isOnline, hasHotel, value }) {
         <span>{`R$ ${value}`}</span>
       </TicketResume>
       <Subtitle text={"Pagamento"} />
-      <PaymentInfo>
-        <CardContainer>
-          <Cards
-            cvc={cardInfo.cvc}
-            expiry={cardInfo.expiry}
-            focused={cardInfo.focus}
-            name={cardInfo.name}
-            number={cardInfo.number}
-          />
-        </CardContainer>
-        <PaymentForm>
-          <div>
-            <PaymentInput
-              type="tel"
-              name="number"
-              placeholder="Número do cartão"
-              className="form-control" //
-              pattern="[\d| ]{16,22}" //
-              required //
-              onChange={handleInputChange}
-              onFocus={handleInputFocus}
-            />
-            <p>E.g.: 49..., 51..., 36..., 37...</p>
-          </div>
-          <PaymentInput
-            type="text"
-            name="name"
-            placeholder="Nome"
-            className="form-control" //
-            required //
-            onChange={handleInputChange}
-            onFocus={handleInputFocus}
-          />
-          <div className="row">
-            <div className="expire">
+      {reservationData.paymentId ? (
+        <Done />
+      ) : (
+        <>
+          <PaymentInfo>
+            <CardContainer>
+              <Cards
+                cvc={cardInfo.cvc}
+                expiry={cardInfo.expiry}
+                focused={cardInfo.focus}
+                name={cardInfo.name}
+                number={cardInfo.number}
+              />
+            </CardContainer>
+            <PaymentForm>
+              <div>
+                <PaymentInput
+                  type="tel"
+                  name="number"
+                  placeholder="Número do cartão"
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                />
+                <p>E.g.: 49..., 51..., 36..., 37...</p>
+              </div>
               <PaymentInput
-                type="tel"
-                name="expiry"
-                className="form-control"
-                placeholder="Valido Até"
-                pattern="\d\d/\d\d"
-                required
+                type="text"
+                name="name"
+                placeholder="Nome"
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
               />
-            </div>
-            <div className="cvc">
-              <PaymentInput
-                type="tel"
-                name="cvc"
-                className="form-control"
-                placeholder="CVC"
-                pattern="\d{3,4}"
-                required
-                onChange={handleInputChange}
-                onFocus={handleInputFocus}
-              />
-            </div>
-          </div>
-        </PaymentForm>
-      </PaymentInfo>
+              <div className="row">
+                <div className="expire">
+                  <PaymentInput
+                    type="tel"
+                    name="expiry"
+                    placeholder="Valido Até"
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus}
+                  />
+                </div>
+                <div className="cvc">
+                  <PaymentInput
+                    type="tel"
+                    name="cvc"
+                    placeholder="CVC"
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus}
+                  />
+                </div>
+              </div>
+            </PaymentForm>
+          </PaymentInfo>
+          <ConfirmButton
+            text={"FINALIZAR PAGAMENTO"}
+            onClick={ConfirmPayment}
+          />
+        </>
+      )}
     </>
   );
 }
@@ -109,6 +151,7 @@ const CardContainer = styled.div`
 
 const PaymentInfo = styled.div`
   display: flex;
+  margin-bottom: 40px;
 `;
 
 const PaymentForm = styled.form`
