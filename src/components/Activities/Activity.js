@@ -3,6 +3,7 @@ import { BiLogIn } from "react-icons/bi";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from "react-icons/ai";
 import { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 import useApi from "../../hooks/useApi";
 import UserContext from "../../contexts/UserContext";
@@ -31,8 +32,12 @@ export default function Activity({ activity, date }) {
     request.then(() => {
       setEnrolled(!enrolled);
     });
-    request.catch(() => {
-      console.log("deu ruim");
+    request.catch((error) => {
+      if (error.response.status === 409) {
+        toast(
+          "Erro! Você já está inscrito em uma atividade neste mesmo horário."
+        );
+      }
     });
   }
 
@@ -97,7 +102,8 @@ const ActivityInformationBox = styled.div`
   margin-left: 10px;
 `;
 const PlaceInformationBox = styled.div`
-  color: ${(props) => (props.enrolled || props.places > 0   ? "#078632" : "#CC6666")};
+  color: ${(props) =>
+    props.enrolled || props.places > 0 ? "#078632" : "#CC6666"};
   display: flex;
   flex-direction: column;
   align-items: center;
