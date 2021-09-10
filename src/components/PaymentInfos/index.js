@@ -50,7 +50,7 @@ export default function PaymentInfos() {
         setValue(prices?.presencial + prices?.hotel);
       }
     }
-  }, [isOnline, hasHotel]);
+  }, [isOnline, hasHotel, prices]);
 
   if (!enrollmentData) return "Carregando...";
   if (!enrollmentData.address) return "Preecha suas informações!";

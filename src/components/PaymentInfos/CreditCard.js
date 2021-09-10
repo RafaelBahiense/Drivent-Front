@@ -52,13 +52,15 @@ export default function CreditCard({
       toast("CVC inválido");
     }
 
-    payment.postPayment(value, reservationData.id).then((res) => {
-      setReservationData({
-        ...reservationData,
-        payment: res.data,
-        paymentId: res.data.id,
+    payment
+      .postPayment({ value, reservationId: reservationData.id })
+      .then((res) => {
+        setReservationData({
+          ...reservationData,
+          payment: res.data,
+          paymentId: res.data.id,
+        });
       });
-    });
   }
 
   const pattern = {
