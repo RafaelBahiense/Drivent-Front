@@ -10,14 +10,6 @@ export default class ReservationApi extends AuthenticatedApi {
     });
   }
 
-  getUserReservation() {
-    return api.get("/reservation/user", {
-      headers: {
-        ...this.getAuthorizationHeader(),
-      },
-    });
-  }
-
   postNewReservation({ isPresencial, hasHotel }) {
     return api.post(
       "/reservation/new",
@@ -30,9 +22,9 @@ export default class ReservationApi extends AuthenticatedApi {
     );
   }
 
-  postReservation(roomId, changeRoom) {
+  postRoomReservation(roomId, changeRoom) {
     return api.post(
-      "/reservation/",
+      "/reservation/room",
       { roomId: roomId, changeRoom: changeRoom },
       {
         headers: {
