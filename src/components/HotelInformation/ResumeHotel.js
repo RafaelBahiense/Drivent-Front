@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import Hotel from "../HotelInformation/Hotel";
 import {
   RoomButton,
@@ -8,6 +8,14 @@ import {
 } from "./HotelPageStyle";
 
 export default function ResumeHotel({ userStatus }) {
+  const history = useHistory();
+
+  function changeRoom() {
+    userStatus.changeRoom = userStatus.room.id;
+    delete userStatus.room;
+    history.push("/dashboard/hotel");
+  }
+
   return (
     <>
       <HotelPage>
@@ -19,7 +27,7 @@ export default function ResumeHotel({ userStatus }) {
             room={userStatus?.room}
           />
         </HotelWrapper>
-        <RoomButton>TROCAR DE QUARTO</RoomButton>
+        <RoomButton onClick={changeRoom}>TROCAR DE QUARTO</RoomButton>
       </HotelPage>
     </>
   );

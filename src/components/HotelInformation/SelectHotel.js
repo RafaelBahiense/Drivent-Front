@@ -14,7 +14,7 @@ import { RoomWrapper } from "./RoomInformation/RoomWrapper";
 import Room from "./RoomInformation/Room";
 import { toast } from "react-toastify";
 
-export default function HotelSelection() {
+export default function HotelSelection({ userStatus }) {
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [hotelData, setHotelData] = useState([]);
@@ -29,7 +29,8 @@ export default function HotelSelection() {
   }, []);
 
   function reservateRoom() {
-    const promisse = api.reservation.postReservation(selectedRoom);
+    const changeRoom = userStatus.changeRoom;
+    const promisse = api.reservation.postReservation(selectedRoom, changeRoom);
     promisse.then(() => {
       toast("Seu quarto foi reservado com sucesso!");
       history.push("/dashboard/activities");
@@ -66,6 +67,7 @@ export default function HotelSelection() {
                     <Room
                       key={room.id}
                       room={room}
+                      changeRoom={userStatus?.changeRoom}
                       selectedRoom={selectedRoom}
                       setSelectedRoom={setSelectedRoom}
                     />

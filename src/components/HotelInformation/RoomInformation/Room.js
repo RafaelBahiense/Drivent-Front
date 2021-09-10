@@ -2,7 +2,12 @@ import styled from "styled-components";
 import { BsPerson, BsPersonFill } from "react-icons/bs";
 import { useState } from "react";
 
-export default function Room({ room, selectedRoom, setSelectedRoom }) {
+export default function Room({
+  room,
+  selectedRoom,
+  setSelectedRoom,
+  changeRoom,
+}) {
   const [disabler, setDisabler] = useState(!room.availableBeds);
   const checker = [selectedRoom, room];
 
@@ -10,6 +15,7 @@ export default function Room({ room, selectedRoom, setSelectedRoom }) {
     <RoomCard
       checker={checker}
       disabled={disabler}
+      changeRoom={changeRoom}
       onClick={() => {
         setSelectedRoom(room.id);
       }}
@@ -47,7 +53,14 @@ export default function Room({ room, selectedRoom, setSelectedRoom }) {
 }
 
 const RoomCard = styled.button`
-  cursor: ${(props) => (props.disabled ? "initial" : "pointer")};
+  cursor: ${(props) =>
+    props.disabled || props.changeRoom === props.checker[1].id
+      ? "initial"
+      : "pointer"};
+  pointer-events: ${(props) =>
+    props.disabled || props.changeRoom === props.checker[1].id
+      ? "none"
+      : "initial"};
   width: 190px;
   height: 45px;
   border: 1px solid #cecece;
@@ -58,7 +71,11 @@ const RoomCard = styled.button`
   margin-right: 17px;
   margin-bottom: 8px;
   background-color: ${(props) =>
-    props.checker[0] === props.checker[1].id ? "#FFEED2" : "white"};
+    props.checker[0] === props.checker[1].id
+      ? "#FFEED2"
+      : props.changeRoom === props.checker[1].id
+        ? "#ff8989"
+        : "white"};
   filter: ${(props) => (props.disabled ? "brightness(0.8)" : "brightness(1)")};
   opacity: ${(props) => (props.disabled ? "55%" : "1")};
   .icon {

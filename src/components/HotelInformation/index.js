@@ -37,7 +37,7 @@ export default function HotelInformation() {
       ) : !userStatus?.ticket?.isPresencial ? (
         <MissingStepsMessage />
       ) : userStatus?.ticket?.hasHotel ? (
-        <SelectHotel />
+        <SelectHotel userStatus={userStatus}/>
       ) : (
         <MissingStepsMessage />
       )}
