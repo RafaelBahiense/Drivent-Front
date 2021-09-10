@@ -30,7 +30,7 @@ export default function HotelSelection({ userStatus }) {
 
   function reservateRoom() {
     const changeRoom = userStatus.changeRoom;
-    const promisse = api.reservation.postReservation(selectedRoom, changeRoom);
+    const promisse = api.reservation.postRoomReservation(selectedRoom, changeRoom);
     promisse.then(() => {
       toast("Seu quarto foi reservado com sucesso!");
       history.push("/dashboard/activities");

@@ -20,12 +20,14 @@ import { InputWrapper } from "./InputWrapper";
 import { ErrorMsg } from "./ErrorMsg";
 import { ufList } from "./ufList";
 import FormValidations from "./FormValidations";
+import { useHistory } from "react-router-dom";
 
 dayjs.extend(CustomParseFormat);
 
 export default function PersonalInformationForm() {
   const [dynamicInputIsLoading, setDynamicInputIsLoading] = useState(false);
   const { enrollment, cep } = useApi();
+  const history = useHistory();
 
   const {
     handleSubmit,
@@ -51,22 +53,28 @@ export default function PersonalInformationForm() {
           neighborhood: data.neighborhood,
           addressDetail: data.addressDetail,
         },
-        phone: data.phone.replace(/[^0-9]+/g, "").replace(/^(\d{2})(9?\d{4})(\d{4})$/, "($1) $2-$3"),
+        phone: data.phone
+          .replace(/[^0-9]+/g, "")
+          .replace(/^(\d{2})(9?\d{4})(\d{4})$/, "($1) $2-$3"),
       };
 
-      enrollment.save(newData).then(() => {
-        toast("Salvo com sucesso!");
-      }).catch((error) => {
-        if (error.response?.data?.details) {
-          for (const detail of error.response.data.details) {
-            toast(detail);
+      enrollment
+        .save(newData)
+        .then(() => {
+          toast("Salvo com sucesso!");
+          history.push("/dashboard/payment");
+        })
+        .catch((error) => {
+          if (error.response?.data?.details) {
+            for (const detail of error.response.data.details) {
+              toast(detail);
+            }
+          } else {
+            toast("Não foi possível");
           }
-        } else {
-          toast("Não foi possível");
-        }
-        /* eslint-disable-next-line no-console */
-        console.log(error);
-      });
+          /* eslint-disable-next-line no-console */
+          console.log(error);
+        });
     },
 
     initialValues: {
@@ -85,11 +93,11 @@ export default function PersonalInformationForm() {
   });
 
   useEffect(() => {
-    enrollment.getPersonalInformations().then(response => {
+    enrollment.getPersonalInformations().then((response) => {
       if (response.status !== 200) {
         return;
       }
-      
+
       const { name, cpf, birthday, phone, address } = response.data;
 
       setData({
@@ -120,7 +128,7 @@ export default function PersonalInformationForm() {
     if (isValidCep(valueWithoutMask)) {
       const newDataValues = {
         ...data,
-        [name]: value
+        [name]: value,
       };
 
       setDynamicInputIsLoading(true);
@@ -135,7 +143,7 @@ export default function PersonalInformationForm() {
         });
       });
     }
-  };
+  }
 
   return (
     <>
@@ -173,9 +181,14 @@ export default function PersonalInformationForm() {
               label="Data de Nascimento"
               inputVariant="outlined"
               clearable
-              value={data.birthday && dayjs(data.birthday, "DD-MM-YYYY").toString()}
+              value={
+                data.birthday && dayjs(data.birthday, "DD-MM-YYYY").toString()
+              }
               onChange={(date) => {
-                customHandleChange("birthday", (d) => d && dayjs(d).format("DD-MM-YYYY"))(date);
+                customHandleChange(
+                  "birthday",
+                  (d) => d && dayjs(d).format("DD-MM-YYYY")
+                )(date);
               }}
             />
             {errors.birthday && <ErrorMsg>{errors.birthday}</ErrorMsg>}
@@ -183,7 +196,9 @@ export default function PersonalInformationForm() {
           <InputWrapper>
             <Input
               label="Telefone"
-              mask={data.phone.length < 15 ? "(99) 9999-99999" : "(99) 99999-9999"} // o 9 extra no primeiro é para permitir digitar um número a mais e então passar pra outra máscara - gambiarra? temos
+              mask={
+                data.phone.length < 15 ? "(99) 9999-99999" : "(99) 99999-9999"
+              }
               name="phone"
               value={data.phone || ""}
               onChange={handleChange("phone")}
@@ -271,7 +286,7 @@ export default function PersonalInformationForm() {
               onChange={handleChange("addressDetail")}
             />
           </InputWrapper>
-          
+
           <SubmitContainer>
             <Button type="submit" disabled={dynamicInputIsLoading}>
               Salvar
@@ -284,12 +299,12 @@ export default function PersonalInformationForm() {
 }
 
 const StyledTypography = styled(Typography)`
-  margin-bottom: 20px!important;
+  margin-bottom: 20px !important;
 `;
 
 const SubmitContainer = styled.div`
-  margin-top: 40px!important;
-  width: 100%!important;
+  margin-top: 40px !important;
+  width: 100% !important;
 
   > button {
     margin-top: 0 !important;
