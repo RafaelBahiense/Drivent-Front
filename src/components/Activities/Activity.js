@@ -31,11 +31,15 @@ export default function Activity({ activity, date }) {
     const request = api.activity.saveSeatReservation(activity.id);
     request.then(() => {
       setEnrolled(!enrolled);
+      activity.users.push({
+        userId: userData.user.id,
+        activityId: activity.id,
+      });
     });
     request.catch((error) => {
       if (error.response.status === 409) {
         toast(
-          "Erro! Você já está inscrito em uma atividade neste mesmo horário."
+          "Erro! Você já está inscrito em uma atividade neste mesmo horário"
         );
       }
     });
