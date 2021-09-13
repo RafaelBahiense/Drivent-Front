@@ -22,15 +22,28 @@ export default function HotelSelection({ userStatus }) {
   const api = useApi();
 
   useEffect(() => {
+    getHotelInfos();
+    const intervalId = setInterval(() => {
+      getHotelInfos();
+    }, 3000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  function getHotelInfos() {
     const promisse = api.hotels.getHotelInfo();
     promisse.then((data) => {
       setHotelData(data.data);
     });
-  }, []);
+  }
 
   function reservateRoom() {
     const changeRoom = userStatus.changeRoom;
-    const promisse = api.reservation.postRoomReservation(selectedRoom, changeRoom);
+    const promisse = api.reservation.postRoomReservation(
+      selectedRoom,
+      changeRoom
+    );
     promisse.then(() => {
       toast("Seu quarto foi reservado com sucesso!");
       history.push("/dashboard/activities");
