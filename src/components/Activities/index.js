@@ -13,6 +13,16 @@ export default function SelectEventDay() {
   const api = useApi();
 
   useEffect(() => {
+    getActivitiesInfos();
+    const intervalId = setInterval(() => {
+      getActivitiesInfos();
+    }, 3000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  function getActivitiesInfos() {
     const response = api.activity.getActivities();
     response.then((data) => {
       setEventDays(data.data);
@@ -22,7 +32,7 @@ export default function SelectEventDay() {
         "Houve um erro ao carregar as atividades. Tente novamente em alguns minutos"
       );
     });
-  }, []);
+  }
 
   return (
     <>
@@ -36,9 +46,11 @@ export default function SelectEventDay() {
             selectedDay={selectedDay}
           />
         ))}
-        {selectedDay && <ActivityBox
-          eventDay={eventDays.filter((day) => day.id === selectedDay)[0]}
-        />}
+        {selectedDay && (
+          <ActivityBox
+            eventDay={eventDays.filter((day) => day.id === selectedDay)[0]}
+          />
+        )}
       </Wrapper>
     </>
   );
