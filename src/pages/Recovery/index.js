@@ -8,7 +8,7 @@ import SendCode from "../../components/Recovery/SendCode.js";
 import VerifyCode from "../../components/Recovery/VerifyCode.js";
 import NewPassword from "../../components/Recovery/NewPassword.js";
 
-export default function Dashboard() {
+export default function Recovery() {
   const { eventInfo } = useContext(EventInfoContext);
 
   const [email, setEmail] = useState("");

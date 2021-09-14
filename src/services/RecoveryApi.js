@@ -1,11 +1,11 @@
 import api from "./api";
 
 export default class Recovery {
-  sendEmail(email) {
+  sendCodeToEmail(email) {
     return api.post("/recovery", { email });
   }
 
-  checkCode(email, code) {
+  verifyCode(email, code) {
     return api.post("/recovery/verify", { email, code });
   }
 

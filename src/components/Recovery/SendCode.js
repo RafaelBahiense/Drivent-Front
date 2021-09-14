@@ -19,7 +19,7 @@ export default function SendCode({ emailState, setEmailSent }) {
     setLoadingRecovery(true);
 
     api.recovery
-      .sendEmail(email)
+      .sendCodeToEmail(email)
       .then(() => {
         setEmailSent(true);
         toast("E-mail enviado com sucesso");

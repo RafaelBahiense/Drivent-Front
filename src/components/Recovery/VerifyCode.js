@@ -19,7 +19,7 @@ export default function VerifyCode({ codeState, email, setCodeVerified }) {
     setLoadingVerification(true);
 
     api.recovery
-      .checkCode(email, code)
+      .verifyCode(email, code)
       .then(() => {
         setCodeVerified(true);
         toast("Código validado");
