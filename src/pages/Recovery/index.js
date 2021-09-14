@@ -1,52 +1,20 @@
-import { useState, useContext } from "react";
-import { toast } from "react-toastify";
+import { useContext, useState } from "react";
 
 import AuthLayout from "../../layouts/Auth";
-
-import Input from "../../components/Form/Input";
-import Button from "../../components/Form/Button";
-import Link from "../../components/Link";
-import { Row, Title, Label } from "../../components/Auth";
-
+import { Row, Title } from "../../components/Auth";
 import EventInfoContext from "../../contexts/EventInfoContext";
-import UserContext from "../../contexts/UserContext";
 
-import useApi from "../../hooks/useApi";
+import SendCode from "../../components/Recovery/SendCode.js";
+import VerifyCode from "../../components/Recovery/VerifyCode.js";
+import NewPassword from "../../components/Recovery/NewPassword.js";
 
-export default function Recovery() {
+export default function Dashboard() {
+  const { eventInfo } = useContext(EventInfoContext);
+
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
-  const [loadingRecovery, setLoadingRecovery] = useState(false);
-
-  const api = useApi();
-
-  const { eventInfo } = useContext(EventInfoContext);
-  const { setUserData } = useContext(UserContext);
-
-  function submit(event) {
-    event.preventDefault();
-    setLoadingRecovery(true);
-
-    api.recovery
-      .sendEmail(email)
-      .then(() => {
-        setEmailSent(true);
-        toast("E-mail enviado com sucesso");
-      })
-      .catch((error) => {
-        /* eslint-disable-next-line no-console */
-        console.error(error);
-
-        if (error.response) {
-          toast("Não foi possível enviar o e-mail");
-        } else {
-          toast("Não foi possível conectar ao servidor!");
-        }
-      })
-      .then(() => {
-        setLoadingRecovery(false);
-      });
-  }
+  const [code, setCode] = useState("");
+  const [codeVerified, setCodeVerified] = useState(false);
 
   return (
     <AuthLayout background={eventInfo.backgroundImage}>
@@ -54,29 +22,22 @@ export default function Recovery() {
         <img src={eventInfo.logoImage} alt="Event Logo" />
         <Title>{eventInfo.eventTitle}</Title>
       </Row>
-      <Row>
-        <Label>Recuperação de senha</Label>
-        <form onSubmit={submit}>
-          <Input
-            label="E-mail"
-            type="text"
-            fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+      {emailSent ? (
+        codeVerified ? (
+          <NewPassword email={email} code={code} />
+        ) : (
+          <VerifyCode
+            codeState={{ code, setCode }}
+            email={email}
+            setCodeVerified={setCodeVerified}
           />
-          <Button
-            type="submit"
-            color="primary"
-            fullWidth
-            disabled={loadingRecovery || emailSent}
-          >
-            Enviar e-mail
-          </Button>
-        </form>
-      </Row>
-      <Row>
-        <Link to="/sign-in">Se lembrou da senha? Faça login</Link>
-      </Row>
+        )
+      ) : (
+        <SendCode
+          emailState={{ email, setEmail }}
+          setEmailSent={setEmailSent}
+        />
+      )}
     </AuthLayout>
   );
 }
