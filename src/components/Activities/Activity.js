@@ -14,8 +14,11 @@ export default function Activity({ activity, date }) {
   );
   const [enrolled, setEnrolled] = useState(false);
   const { userData } = useContext(UserContext);
-
   const api = useApi();
+
+  useEffect(() => {
+    setPlaces(activity.totalSeats - activity.users.length);
+  }, [activity]);
 
   useEffect(() => {
     const foundSeatReservation = activity.users.find(
@@ -62,7 +65,9 @@ export default function Activity({ activity, date }) {
       setPlaces(activity.totalSeats - activity.users.length);
     });
     request.catch((error) => {
-      toast("Houve um erro ao retirar a sua reserva. Tente novamente em alguns segundos.");
+      toast(
+        "Houve um erro ao retirar a sua reserva. Tente novamente em alguns segundos."
+      );
     });
   }
 
