@@ -34,7 +34,8 @@ export default function PersonalInformationForm() {
 
   const onChangeFile = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log(imageList, addUpdateIndex);
+    console.log(imageList, addUpdateIndex, "mudou");
+    console.log(imageList[0].url.length);
     setSelectedfile(imageList);
   };
   const {
@@ -83,14 +84,14 @@ export default function PersonalInformationForm() {
           /* eslint-disable-next-line no-console */
           console.log(error);
         });
-      const promise = profilePicture.postProfilePicture(selectedFile);
+      const promise = profilePicture.postProfilePicture(selectedFile[0].url);
       promise.then(() => {
-        console.log("foi");
+        toast("Foto salva com sucesso!");
       });
       promise.catch(() => {
-        toast("Não deu p subir a foto");
+        toast("Não foi possível carregar a foto");
       });
-      console.log(selectedFile[0], "aa");
+      console.log(selectedFile);
     },
 
     initialValues: {
@@ -114,8 +115,8 @@ export default function PersonalInformationForm() {
         return;
       }
 
-      const { name, cpf, birthday, phone, address } = response.data;
-
+      const { name, cpf, birthday, phone, url, address } = response.data;
+      setSelectedfile([{ url: url }]);
       setData({
         name,
         cpf,

@@ -4,7 +4,7 @@ import AuthenticatedApi from "./AuthenticatedApi";
 export default class ProfilePictureApi extends AuthenticatedApi {
   postProfilePicture(pictureUrl) {
     return api.post(
-      "/profilePicture/",
+      "/avatar/",
       { pictureUrl: pictureUrl },
       {
         headers: {
