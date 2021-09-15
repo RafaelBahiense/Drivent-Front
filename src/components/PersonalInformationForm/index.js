@@ -22,6 +22,7 @@ import { ufList } from "./ufList";
 import FormValidations from "./FormValidations";
 import { useHistory } from "react-router-dom";
 import { Button as ButtonPicture } from "@material-ui/core";
+import ImageUploading from "react-images-uploading";
 dayjs.extend(CustomParseFormat);
 
 export default function PersonalInformationForm() {
@@ -30,25 +31,11 @@ export default function PersonalInformationForm() {
   const history = useHistory();
   const [selectedFile, setSelectedfile] = useState(null);
 
-  function onFileChange(event) {
-    // Update the state
-    setSelectedfile(event.target.files[0]);
-    console.log(selectedFile);
-  }
-  function onFileSelected() {
-    // Create an object of formData
-    const formData = new FormData();
-
-    // Update the formData object
-    formData.append(
-      "myFile",
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-
-    // Details of the uploaded file
-    console.log(this.state.selectedFile);
-  }
+  const onChangeFile = (imageList, addUpdateIndex) => {
+    // data for submit
+    console.log(imageList, addUpdateIndex);
+    setSelectedfile(imageList);
+  };
   const {
     handleSubmit,
     handleChange,
@@ -168,7 +155,13 @@ export default function PersonalInformationForm() {
     <>
       <HeaderWrapper>
         <StyledTypography variant="h4">Suas Informações</StyledTypography>
-        <ProfilePicture src="https://upload.wikimedia.org/wikipedia/commons/a/af/Bananas_%28Alabama_Extension%29.jpg" />
+        <ProfilePicture
+          src={
+            selectedFile
+              ? selectedFile[0].data_url
+              : "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg"
+          }
+        />
       </HeaderWrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <FormWrapper onSubmit={handleSubmit}>
@@ -308,16 +301,27 @@ export default function PersonalInformationForm() {
               onChange={handleChange("addressDetail")}
             />
           </InputWrapper>
-          <InputFile>
-            <input
+          <ImageUploading
+            value={selectedFile}
+            onChange={onChangeFile}
+            dataURLKey="data_url"
+          >
+            {({ imageList, onImageUpload, dragProps }) => (
+              <InputFile>
+                {/* <input
               id="contained-button-file"
               type="file"
               onChange={(e) => onFileChange(e)}
             />
-            <label htmlFor="contained-button-file">
-              <div>Carregar sua foto de perfil</div>
-            </label>
-          </InputFile>
+            <label htmlFor="contained-button-file"> */}
+                <div onClick={onImageUpload} {...dragProps}>
+                  Carregar sua foto de perfil
+                </div>
+                {/* </label> */}
+              </InputFile>
+            )}
+          </ImageUploading>
+
           <SubmitContainer>
             <Button type="submit" disabled={dynamicInputIsLoading}>
               Salvar
@@ -331,14 +335,7 @@ export default function PersonalInformationForm() {
 const InputFile = styled.div`
   margin-top: 8px !important;
   width: 100% !important;
-  input {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-  }
+  background-color: #E0E0E0;
 `;
 
 const StyledTypography = styled(Typography)``;
