@@ -21,13 +21,14 @@ import { ErrorMsg } from "./ErrorMsg";
 import { ufList } from "./ufList";
 import FormValidations from "./FormValidations";
 import { useHistory } from "react-router-dom";
-import { Button as ButtonPicture } from "@material-ui/core";
+
 import ImageUploading from "react-images-uploading";
+import { BsCloudUpload } from "react-icons/bs";
 dayjs.extend(CustomParseFormat);
 
 export default function PersonalInformationForm() {
   const [dynamicInputIsLoading, setDynamicInputIsLoading] = useState(false);
-  const { enrollment, cep } = useApi();
+  const { profilePicture, enrollment, cep } = useApi();
   const history = useHistory();
   const [selectedFile, setSelectedfile] = useState(null);
 
@@ -82,6 +83,14 @@ export default function PersonalInformationForm() {
           /* eslint-disable-next-line no-console */
           console.log(error);
         });
+      const promise = profilePicture.postProfilePicture(selectedFile);
+      promise.then(() => {
+        console.log("foi");
+      });
+      promise.catch(() => {
+        toast("Não deu p subir a foto");
+      });
+      console.log(selectedFile[0], "aa");
     },
 
     initialValues: {
@@ -158,8 +167,8 @@ export default function PersonalInformationForm() {
         <ProfilePicture
           src={
             selectedFile
-              ? selectedFile[0].data_url
-              : "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg"
+              ? selectedFile[0].url
+              : "https://st3.depositphotos.com/4111759/13425/v/600/depositphotos_134255634-stock-illustration-avatar-icon-male-profile-gray.jpg"
           }
         />
       </HeaderWrapper>
@@ -304,7 +313,7 @@ export default function PersonalInformationForm() {
           <ImageUploading
             value={selectedFile}
             onChange={onChangeFile}
-            dataURLKey="data_url"
+            dataURLKey="url"
           >
             {({ imageList, onImageUpload, dragProps }) => (
               <InputFile>
@@ -314,9 +323,10 @@ export default function PersonalInformationForm() {
               onChange={(e) => onFileChange(e)}
             />
             <label htmlFor="contained-button-file"> */}
-                <div onClick={onImageUpload} {...dragProps}>
-                  Carregar sua foto de perfil
-                </div>
+                <Button onClick={onImageUpload} {...dragProps}>
+                  <BsCloudUpload className="icon" />
+                  Carregue sua foto de perfil
+                </Button>
                 {/* </label> */}
               </InputFile>
             )}
@@ -333,15 +343,18 @@ export default function PersonalInformationForm() {
   );
 }
 const InputFile = styled.div`
-  margin-top: 8px !important;
   width: 100% !important;
-  background-color: #E0E0E0;
+  margin-top: 8px !important;
+  .icon {
+    font-size: 20px;
+    margin-right: 6px;
+  }
 `;
 
 const StyledTypography = styled(Typography)``;
 
 const SubmitContainer = styled.div`
-  margin-top: 30px !important;
+  margin-top: 22px !important;
   width: 100% !important;
 
   > button {
@@ -364,4 +377,5 @@ const ProfilePicture = styled.img`
   width: 70px;
   height: 70px;
   border-radius: 50%;
+  box-shadow: 0 0 0 1.5px lightgrey;
 `;
