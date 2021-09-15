@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import styled from "styled-components";
 import DateFnsUtils from "@date-io/date-fns";
 import Typography from "@material-ui/core/Typography";
@@ -21,14 +21,34 @@ import { ErrorMsg } from "./ErrorMsg";
 import { ufList } from "./ufList";
 import FormValidations from "./FormValidations";
 import { useHistory } from "react-router-dom";
-
+import { Button as ButtonPicture } from "@material-ui/core";
 dayjs.extend(CustomParseFormat);
 
 export default function PersonalInformationForm() {
   const [dynamicInputIsLoading, setDynamicInputIsLoading] = useState(false);
   const { enrollment, cep } = useApi();
   const history = useHistory();
+  const [selectedFile, setSelectedfile] = useState(null);
 
+  function onFileChange(event) {
+    // Update the state
+    setSelectedfile(event.target.files[0]);
+    console.log(selectedFile);
+  }
+  function onFileSelected() {
+    // Create an object of formData
+    const formData = new FormData();
+
+    // Update the formData object
+    formData.append(
+      "myFile",
+      this.state.selectedFile,
+      this.state.selectedFile.name
+    );
+
+    // Details of the uploaded file
+    console.log(this.state.selectedFile);
+  }
   const {
     handleSubmit,
     handleChange,
@@ -144,7 +164,6 @@ export default function PersonalInformationForm() {
       });
     }
   }
-
   return (
     <>
       <HeaderWrapper>
@@ -289,7 +308,16 @@ export default function PersonalInformationForm() {
               onChange={handleChange("addressDetail")}
             />
           </InputWrapper>
-
+          <InputFile>
+            <input
+              id="contained-button-file"
+              type="file"
+              onChange={(e) => onFileChange(e)}
+            />
+            <label htmlFor="contained-button-file">
+              <div>Carregar sua foto de perfil</div>
+            </label>
+          </InputFile>
           <SubmitContainer>
             <Button type="submit" disabled={dynamicInputIsLoading}>
               Salvar
@@ -300,11 +328,23 @@ export default function PersonalInformationForm() {
     </>
   );
 }
+const InputFile = styled.div`
+  margin-top: 8px !important;
+  width: 100% !important;
+  input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+`;
 
 const StyledTypography = styled(Typography)``;
 
 const SubmitContainer = styled.div`
-  margin-top: 40px !important;
+  margin-top: 30px !important;
   width: 100% !important;
 
   > button {
