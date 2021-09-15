@@ -147,7 +147,10 @@ export default function PersonalInformationForm() {
 
   return (
     <>
-      <StyledTypography variant="h4">Suas Informações</StyledTypography>
+      <HeaderWrapper>
+        <StyledTypography variant="h4">Suas Informações</StyledTypography>
+        <ProfilePicture src="https://upload.wikimedia.org/wikipedia/commons/a/af/Bananas_%28Alabama_Extension%29.jpg" />
+      </HeaderWrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <FormWrapper onSubmit={handleSubmit}>
           <InputWrapper>
@@ -298,9 +301,7 @@ export default function PersonalInformationForm() {
   );
 }
 
-const StyledTypography = styled(Typography)`
-  margin-bottom: 20px !important;
-`;
+const StyledTypography = styled(Typography)``;
 
 const SubmitContainer = styled.div`
   margin-top: 40px !important;
@@ -309,4 +310,21 @@ const SubmitContainer = styled.div`
   > button {
     margin-top: 0 !important;
   }
+`;
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  margin-top: -15px;
+  @media (max-width: 600px) {
+    margin-right: 12px;
+    margin-top: -12px;
+  }
+`;
+const ProfilePicture = styled.img`
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
 `;
