@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import styled from "styled-components";
 import DateFnsUtils from "@date-io/date-fns";
 import Typography from "@material-ui/core/Typography";
@@ -7,10 +7,8 @@ import dayjs from "dayjs";
 import CustomParseFormat from "dayjs/plugin/customParseFormat";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
-
 import useApi from "../../hooks/useApi";
 import { useForm } from "../../hooks/useForm";
-
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import Select from "../../components/Form/Select";
@@ -21,14 +19,21 @@ import { ErrorMsg } from "./ErrorMsg";
 import { ufList } from "./ufList";
 import FormValidations from "./FormValidations";
 import { useHistory } from "react-router-dom";
-
+import ImageUploading from "react-images-uploading";
+import { BsCloudUpload } from "react-icons/bs";
 dayjs.extend(CustomParseFormat);
 
 export default function PersonalInformationForm() {
   const [dynamicInputIsLoading, setDynamicInputIsLoading] = useState(false);
-  const { enrollment, cep } = useApi();
+  const { profilePicture, enrollment, cep } = useApi();
   const history = useHistory();
+  const [selectedFile, setSelectedfile] = useState(null);
+  const [avatar, setAvatar] = useState(null);
 
+  const onChangeFile = (imageList, addUpdateIndex) => {;
+    setAvatar(imageList);
+    setSelectedfile(imageList);
+  };
   const {
     handleSubmit,
     handleChange,
@@ -39,7 +44,7 @@ export default function PersonalInformationForm() {
   } = useForm({
     validations: FormValidations,
 
-    onSubmit: (data) => {
+    onSubmit: async(data) => {
       const newData = {
         name: data.name,
         cpf: data.cpf,
@@ -57,12 +62,10 @@ export default function PersonalInformationForm() {
           .replace(/[^0-9]+/g, "")
           .replace(/^(\d{2})(9?\d{4})(\d{4})$/, "($1) $2-$3"),
       };
-
-      enrollment
+      await enrollment
         .save(newData)
         .then(() => {
           toast("Salvo com sucesso!");
-          history.push("/dashboard/payment");
         })
         .catch((error) => {
           if (error.response?.data?.details) {
@@ -75,8 +78,19 @@ export default function PersonalInformationForm() {
           /* eslint-disable-next-line no-console */
           console.log(error);
         });
+      if (selectedFile) {
+        const promise = profilePicture.postProfilePicture(selectedFile[0].url);
+        promise.then(() => {
+          toast("Foto salva com sucesso!");
+          history.push("/dashboard/payment");
+        });
+        promise.catch(() => {
+          toast("Não foi possível carregar a foto");
+        });
+      } else {
+        history.push("/dashboard/payment");
+      }
     },
-
     initialValues: {
       cpf: "",
       name: "",
@@ -98,8 +112,8 @@ export default function PersonalInformationForm() {
         return;
       }
 
-      const { name, cpf, birthday, phone, address } = response.data;
-
+      const { name, cpf, birthday, phone, url, address } = response.data;
+      if (url) setAvatar([{ url: url }]);
       setData({
         name,
         cpf,
@@ -144,10 +158,18 @@ export default function PersonalInformationForm() {
       });
     }
   }
-
   return (
     <>
-      <StyledTypography variant="h4">Suas Informações</StyledTypography>
+      <HeaderWrapper>
+        <StyledTypography variant="h4">Suas Informações</StyledTypography>
+        <ProfilePicture
+          src={
+            selectedFile || avatar
+              ? avatar[0]?.url
+              : "https://st3.depositphotos.com/4111759/13425/v/600/depositphotos_134255634-stock-illustration-avatar-icon-male-profile-gray.jpg"
+          }
+        />
+      </HeaderWrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <FormWrapper onSubmit={handleSubmit}>
           <InputWrapper>
@@ -286,6 +308,20 @@ export default function PersonalInformationForm() {
               onChange={handleChange("addressDetail")}
             />
           </InputWrapper>
+          <ImageUploading
+            value={selectedFile}
+            onChange={onChangeFile}
+            dataURLKey="url"
+          >
+            {({ imageList, onImageUpload, dragProps }) => (
+              <InputFile>
+                <Button onClick={onImageUpload} {...dragProps}>
+                  <BsCloudUpload className="icon" />
+                  Carregue sua foto de perfil
+                </Button>
+              </InputFile>
+            )}
+          </ImageUploading>
 
           <SubmitContainer>
             <Button type="submit" disabled={dynamicInputIsLoading}>
@@ -297,16 +333,40 @@ export default function PersonalInformationForm() {
     </>
   );
 }
-
-const StyledTypography = styled(Typography)`
-  margin-bottom: 20px !important;
+const InputFile = styled.div`
+  width: 100% !important;
+  margin-top: 8px !important;
+  .icon {
+    font-size: 20px;
+    margin-right: 6px;
+  }
 `;
 
+const StyledTypography = styled(Typography)``;
+
 const SubmitContainer = styled.div`
-  margin-top: 40px !important;
+  margin-top: 22px !important;
   width: 100% !important;
 
   > button {
     margin-top: 0 !important;
   }
+`;
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  margin-top: -15px;
+  @media (max-width: 600px) {
+    margin-right: 12px;
+    margin-top: -12px;
+  }
+`;
+const ProfilePicture = styled.img`
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px lightgrey;
 `;

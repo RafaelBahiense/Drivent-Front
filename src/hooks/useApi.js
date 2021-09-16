@@ -9,6 +9,7 @@ import ReservationApi from "../services/ReservationApi";
 import ActivitiesApi from "../services/ActivitiesApi";
 import TicketApi from "../services/TicketApi";
 import PaymentApi from "../services/PaymentApi";
+import ProfilePictureApi from "../services/ProfilePictureApi";
 import RecoveryApi from "../services/RecoveryApi";
 
 export default function useApi() {
@@ -24,6 +25,7 @@ export default function useApi() {
     reservation: new ReservationApi(),
     activity: new ActivitiesApi(),
     payment: new PaymentApi(),
+    profilePicture: new ProfilePictureApi(),
     recovery: new RecoveryApi(),
   };
 }
