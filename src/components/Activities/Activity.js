@@ -42,7 +42,7 @@ export default function Activity({ activity, date }) {
     request.catch((error) => {
       if (error.response.status === 409) {
         toast(
-          "Erro! Você já está inscrito em uma atividade neste mesmo horário"
+          "Você já está inscrito em uma atividade neste mesmo horário"
         );
       }
     });

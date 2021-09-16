@@ -7,10 +7,8 @@ import dayjs from "dayjs";
 import CustomParseFormat from "dayjs/plugin/customParseFormat";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
-
 import useApi from "../../hooks/useApi";
 import { useForm } from "../../hooks/useForm";
-
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import Select from "../../components/Form/Select";
@@ -21,7 +19,6 @@ import { ErrorMsg } from "./ErrorMsg";
 import { ufList } from "./ufList";
 import FormValidations from "./FormValidations";
 import { useHistory } from "react-router-dom";
-
 import ImageUploading from "react-images-uploading";
 import { BsCloudUpload } from "react-icons/bs";
 dayjs.extend(CustomParseFormat);
@@ -31,11 +28,10 @@ export default function PersonalInformationForm() {
   const { profilePicture, enrollment, cep } = useApi();
   const history = useHistory();
   const [selectedFile, setSelectedfile] = useState(null);
+  const [avatar, setAvatar] = useState(null);
 
-  const onChangeFile = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex, "mudou");
-    console.log(imageList[0].url.length);
+  const onChangeFile = (imageList, addUpdateIndex) => {;
+    setAvatar(imageList);
     setSelectedfile(imageList);
   };
   const {
@@ -48,7 +44,7 @@ export default function PersonalInformationForm() {
   } = useForm({
     validations: FormValidations,
 
-    onSubmit: (data) => {
+    onSubmit: async(data) => {
       const newData = {
         name: data.name,
         cpf: data.cpf,
@@ -66,12 +62,10 @@ export default function PersonalInformationForm() {
           .replace(/[^0-9]+/g, "")
           .replace(/^(\d{2})(9?\d{4})(\d{4})$/, "($1) $2-$3"),
       };
-
-      enrollment
+      await enrollment
         .save(newData)
         .then(() => {
           toast("Salvo com sucesso!");
-          history.push("/dashboard/payment");
         })
         .catch((error) => {
           if (error.response?.data?.details) {
@@ -84,16 +78,19 @@ export default function PersonalInformationForm() {
           /* eslint-disable-next-line no-console */
           console.log(error);
         });
-      const promise = profilePicture.postProfilePicture(selectedFile[0].url);
-      promise.then(() => {
-        toast("Foto salva com sucesso!");
-      });
-      promise.catch(() => {
-        toast("Não foi possível carregar a foto");
-      });
-      console.log(selectedFile);
+      if (selectedFile) {
+        const promise = profilePicture.postProfilePicture(selectedFile[0].url);
+        promise.then(() => {
+          toast("Foto salva com sucesso!");
+          history.push("/dashboard/payment");
+        });
+        promise.catch(() => {
+          toast("Não foi possível carregar a foto");
+        });
+      } else {
+        history.push("/dashboard/payment");
+      }
     },
-
     initialValues: {
       cpf: "",
       name: "",
@@ -116,7 +113,7 @@ export default function PersonalInformationForm() {
       }
 
       const { name, cpf, birthday, phone, url, address } = response.data;
-      setSelectedfile([{ url: url }]);
+      if (url) setAvatar([{ url: url }]);
       setData({
         name,
         cpf,
@@ -167,8 +164,8 @@ export default function PersonalInformationForm() {
         <StyledTypography variant="h4">Suas Informações</StyledTypography>
         <ProfilePicture
           src={
-            selectedFile
-              ? selectedFile[0].url
+            selectedFile || avatar
+              ? avatar[0]?.url
               : "https://st3.depositphotos.com/4111759/13425/v/600/depositphotos_134255634-stock-illustration-avatar-icon-male-profile-gray.jpg"
           }
         />
