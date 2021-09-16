@@ -315,17 +315,10 @@ export default function PersonalInformationForm() {
           >
             {({ imageList, onImageUpload, dragProps }) => (
               <InputFile>
-                {/* <input
-              id="contained-button-file"
-              type="file"
-              onChange={(e) => onFileChange(e)}
-            />
-            <label htmlFor="contained-button-file"> */}
                 <Button onClick={onImageUpload} {...dragProps}>
                   <BsCloudUpload className="icon" />
                   Carregue sua foto de perfil
                 </Button>
-                {/* </label> */}
               </InputFile>
             )}
           </ImageUploading>
