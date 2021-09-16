@@ -10,6 +10,7 @@ import ActivitiesApi from "../services/ActivitiesApi";
 import TicketApi from "../services/TicketApi";
 import PaymentApi from "../services/PaymentApi";
 import ProfilePictureApi from "../services/ProfilePictureApi";
+import RecoveryApi from "../services/RecoveryApi";
 
 export default function useApi() {
   return {
@@ -25,5 +26,6 @@ export default function useApi() {
     activity: new ActivitiesApi(),
     payment: new PaymentApi(),
     profilePicture: new ProfilePictureApi(),
+    recovery: new RecoveryApi(),
   };
 }
